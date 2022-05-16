@@ -1,0 +1,129 @@
+﻿@model TaskTrackingSystem.UI.Web.Models.AccountModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PCName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PCName)
+        </dd>
+
+    </dl>
+</div>
+
+<h2>Задачи :</h2>
+
+<table class="table sortable">
+    <tr>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Tasks[0].Name)
+        </th>
+        <th class="col-xs-2">
+            Проект
+        </th>      
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.Tasks[0].StatusName)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.Tasks[0].DateStart)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.Tasks[0].DateEnd)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.Tasks)
+    {
+    <tr>
+        <td>
+            @Html.ActionLink(item.Name, "Details", "Task", new { id = item.Id }, new { })
+        </td>
+        <td>
+            @Html.ActionLink(item.ProjectName, "Index", "Project", new { id = item.ProjectId }, new { })
+        </td>
+        <td>
+            <span class="@item.GetColorForStatus">
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </span>
+        </td>
+        <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+            @Html.DisplayFor(modelItem => item.DateStart)
+        </td>
+        <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+            @Html.DisplayFor(modelItem => item.DateEnd)
+        </td>
+
+    </tr>
+    }
+
+</table>
+
+<h2>Проекты :</h2>
+
+<table class="table sortable">
+    <tr>
+        <th class="col-xs-4">
+            Название
+        </th>
+        <th class="col-xs-1">
+            Статус
+        </th>
+        <th class="col-xs-1">
+            Дата начала
+        </th>
+        <th class="col-xs-1">
+            Дата завершения
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Projects)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+            </td>
+            <td>
+                <span class="@item.GetColorForStatus">
+                    @Html.DisplayFor(modelItem => item.Status.Name)
+                </span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateEnd)
+            </td>
+        </tr>
+    }
+</table>

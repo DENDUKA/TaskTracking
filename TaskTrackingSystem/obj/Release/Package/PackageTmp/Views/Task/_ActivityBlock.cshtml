@@ -1,0 +1,113 @@
+﻿@using TaskTrackingSystem.CustomAuthorizeAttribute;
+
+@model TaskTrackingSystem.Models.TaskModel
+
+<div class="module toggle-wrap" id="activitymodule">
+    <div class="mod-header">
+        <h3 class="toggle-title">Активность</h3>
+    </div>
+    <div class="mod-content">
+        <div class="tabwrap tabs2">
+            <ul class="tabs horizontal">
+                <li id="comments-tab" class="active">
+                    <a>
+                        <strong>Комментарии</strong>
+                    </a>
+                </li>
+                @if (ControllerAccessAttribute.GetAccessPage("Task", "ChengeHistoryTask"))
+                {
+                    <li id="logs-tab">
+                        <a>
+                            <strong>Логи</strong>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div id="comments-tab-content" class="issuePanelContainer">
+            <div class="issue-data-block activity-comment twixi-block expanded" style="padding-left:0">
+                <div class="twixi-wrap concise actionContainer" style="padding-left:0">
+                    <div class="action-details flooded">
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <div>
+                                @Html.ActionLink(comment.Account.Name, "Details", "Account", new { id = comment.Account.Login }, new { }) добавил комментарий - @comment.Time
+                            </div>
+                            <div>
+                                <textarea class="textarea long-field" runat="server" text cols="60" name="comment" rows="10" style="overflow: hidden; height: 100px; width:100%; resize: none" disabled resize="false">@comment.Text</textarea>
+                            </div>
+                            <hr />
+                        }
+
+                        @using (Html.BeginForm("Add", "Comment"))
+                        {
+                            @Html.Hidden("taskid", Model.Id)
+                            <div>
+                                <div> Комментарий :</div>
+                                <div>
+
+                                    <textarea class="textarea long-field" runat="server" text cols="60" id="comment" name="comment" rows="10" style="overflow: hidden; height: 100px; width:100%;"></textarea>
+                                    <div class="content-inner">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="command-bar">
+                                <div class="ops-cont">
+                                    <div class="ops-menus">
+                                        <ul id="opsbar-edit" class="first ops">
+                                            <li class="last">
+                                                <input type="submit" value="Добавить" class="issueaction-edit-issue button edit first last" />
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (ControllerAccessAttribute.GetAccessPage("Task", "ChengeHistoryTask"))
+        {
+            <div id="logs-tab-content" class="issuePanelContainer hidden">
+
+                @foreach (var item in Model.Logs)
+                {
+                    @Html.Partial("_LogBlockItem", item);
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    var tabs = ['#comments-tab', "#logs-tab"];
+
+    $(document).ready(function () {
+
+        tabs.forEach(function (item, index, tabs) {
+            $(item).on('click', changeActiveTab);
+        });
+    });
+
+    function changeActiveTab() {
+
+        tabs.forEach(function (item, index, tabs) {
+            $(item).removeClass("active");
+
+            var content = $(item + "-content");
+
+            if (!content.hasClass("hidden")) {
+                content.addClass("hidden");
+            }
+        });
+
+        item = $(this);
+        item.addClass("active");
+
+        var idcontent = "#" + item.attr("id") + "-content";
+        $(idcontent).removeClass("hidden");
+    }
+</script>

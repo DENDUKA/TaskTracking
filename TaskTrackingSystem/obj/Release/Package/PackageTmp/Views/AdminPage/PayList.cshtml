@@ -1,0 +1,117 @@
+﻿@using System.IO;
+
+@model TaskTrackingSystem.Models.PayListModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="alertHeader"></div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/AdminPage">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h2>Загрузка Расчётных листков</h2>
+
+                @using (Html.BeginForm("UploadFile", "AdminPage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div>
+                        @Html.TextBox("file", "", new { type = "file" })
+                        <br />
+                        <input type="submit" value="Upload" />
+                        @ViewBag.Message
+                    </div>
+                }
+
+
+                <br />
+
+                <div class="ops-cont">
+                    <table id="issuetable" class="hide-carrot sortable">
+                        <thead>
+                            <tr class="rowHeader">
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Логин</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Дата</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Статус БД</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">К Выплате</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Должность</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">ЗП</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Ошибки</span>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model.PayList)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Login
+                                        </td>
+                                        <td>
+                                            @item.Date.Date.ToString()
+                                        </td>
+                                        <td>
+                                            @item.StatusBD
+                                        </td>
+                                        <td>
+                                            @item.ToPay
+                                        </td>
+                                        <td>
+                                            @item.Position
+                                        </td>
+                                        <td>
+                                            @item.Salary
+                                        </td>
+                                        <td>
+                                            @item.Error
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+
+<script src="~/Scripts/Awards/script.js"></script>
+
+<script src="~/signalr/hubs"></script>

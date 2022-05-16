@@ -1,0 +1,14 @@
+﻿.parentWidth {
+    display: inline;
+    width: inherit;
+}
+
+.dropDownWidth {
+    width: 240px;
+    display: inline-block;
+}
+
+.checkboxWidth {
+    width: 120px;
+    display: inline-block;
+}

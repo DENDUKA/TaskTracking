@@ -1,0 +1,56 @@
+﻿@model TaskTrackingSystem.Models.SettingsModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Scripts/MyScripts/Calendar/URLHelper.js"></script>
+
+<h2>Настройки</h2>
+
+
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Account, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListAccounts, new { @class = "form-control", @id = "DropDownListAccounts" })
+        </div>
+    </div>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProjectIdForSysAdmin, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-4">
+            @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListSelectProjectForSysAdmin, new { @class = "form-control", @id = "DropDownListSelectProjectForSysAdmin" })
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Заполнение Системного администратора
+        //$($("#DropDownListAccounts option[value=@Model.AccountLogin]")[0]).attr("selected", "");
+
+        //Заполнение проекта для Системного администратора
+        $($("#DropDownListSelectProjectForSysAdmin option[value=@Model.ProjectIdForSysAdmin]")[0]).attr("selected", "");
+
+        //Изменение Системного администратора
+        $("#DropDownListAccounts").change(function () {
+            sysAdminLogin = $('#DropDownListAccounts').val();
+            $.post(getURLForRequest("Settings", "UpdateSysAdmin"), { "SysAdminLogin": sysAdminLogin });
+        });
+
+        //Изменение Проекта для системного администратора
+        $("#DropDownListSelectProjectForSysAdmin").change(function () {
+            ProjectId = $('#DropDownListSelectProjectForSysAdmin').val();
+            $.post(getURLForRequest("Settings", "UpdateProjectForSysAdmin"), { "ProjectId": ProjectId });
+        });
+    });
+</script>

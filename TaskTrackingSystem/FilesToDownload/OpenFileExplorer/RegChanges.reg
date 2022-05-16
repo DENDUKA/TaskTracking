@@ -1,0 +1,12 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\myproto]
+"URL Protocol"=""
+@="URL:OpenFileExplorer Protocol"
+
+[HKEY_CLASSES_ROOT\myproto\shell]
+
+[HKEY_CLASSES_ROOT\myproto\shell\open]
+
+[HKEY_CLASSES_ROOT\myproto\shell\open\command]
+@="\"C:\openFileExplorer.exe\" \"%1\""

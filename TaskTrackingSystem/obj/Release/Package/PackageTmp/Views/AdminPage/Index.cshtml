@@ -1,0 +1,42 @@
+﻿@{var access = TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.GetAccessForAccount();}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Админка</h2>
+
+@if (access.UserListPage)
+{
+    <div>
+        @Html.ActionLink("Пользователи", "", "Account")
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Patch Notes", "PatchNotes", "Home")
+</div>
+@if (access.AccountAccessPage)
+{
+    <div>
+        @Html.ActionLink("Настройки", "", "Settings")
+    </div>
+}
+@if (access.AccountAccessPage)
+{
+    <div>
+        @Html.ActionLink("Найстройки доступа для пользователей", "", "AccountAccess")
+    </div>
+}
+
+@using (Html.BeginForm("ClearCache", "Home"))
+{
+    @Html.AntiForgeryToken()
+    <input type="submit" value="ClearCache" class="btn btn-default" />
+}
+
+@using (Html.BeginForm("SomeAction", "Home"))
+{
+    @Html.AntiForgeryToken()
+    <input type="submit" value="SomeAction" class="btn btn-default" />
+}

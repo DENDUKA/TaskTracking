@@ -1,0 +1,404 @@
+﻿@model TaskTrackingSystem.UI.Web.Models.AccountModel
+@using TaskTrackingSystem.Shared.Entities;
+@using TaskTrackingSystem.Models;
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage();}
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>
+        Пользователь : @Model.Name
+    </h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Account/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            @if (ControllerAccessAttribute.GetAccessPage("Account", "Update"))
+                            {
+                                <ul id="opsbar-edit" class="first ops">
+                                    <li class="last">
+                                        @Html.ActionLink("Редактировать", "Update", "Account", new { id = Model.Login }, new { @class = "issueaction-edit-issue button edit first last" })
+                                    </li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="column primary">
+                    <div class="mod-content">
+                        <ul id="issuedetails" class="property-list two-cols">
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Login) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Login)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Name) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Name)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Role) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Role)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.PCName) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.PCName)
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column secondary" style="min-height: 55px;">
+                    <div class="content">
+                        <span></span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div id="resume" class="module toggle-wrap collapsed">
+                    <div class="mod-header">
+                        <h3 class="toggle-title">Резюме</h3>
+                    </div>
+                    <div class="mod-content hidden">
+                        <ul id="issuedetails" class="property-list two-cols">
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Post) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Post)
+                                    </span>
+                                </div>
+                            </li>
+
+                            @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh() || TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsCurrentUser(Model.Login))
+                            {
+                                <li class="item item-right">
+                                    <div class="wrap">
+                                        <strong class="name">@Html.DisplayNameFor(model => model.Wage) :</strong>
+                                        <span class="value">
+                                            @Html.DisplayFor(model => model.Wage)
+                                        </span>
+                                    </div>
+                                </li>
+                            }
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Department) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Department)
+                                    </span>
+                                </div>
+                            </li>
+                            @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdmin() || TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsCurrentUser(Model.Login))
+
+                            {
+                                <li class="item">
+                                    <div class="wrap">
+                                        <strong class="name">@Html.DisplayNameFor(model => model.DateBirth) :</strong>
+                                        <span class="value">
+                                            @Html.DisplayFor(model => model.DateBirth)
+                                        </span>
+                                    </div>
+                                </li>
+                            }
+                            <li class="item item">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Education) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Education)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Responsibilities) :</strong>
+                                    <span class="value">
+
+                                        <textarea readonly="readonly" cols="60" class="form-control" id="Responsibilities" name="Responsibilities" rows="7">@Model.Responsibilities</textarea>
+
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div id="details-module" class="module toggle-wrap collapsed">
+                    <div class="mod-header">
+                        <h3 class="toggle-title">Задачи</h3>
+                    </div>
+                    <div class="mod-content hidden">
+                        <div class="ops-cont">
+                            <table id="issuetable" class="hide-carrot sortable">
+                                <thead>
+                                    <tr class="rowHeader">
+                                        <th class="colHeaderLink sortable headerrow-summary">
+                                            <span title="Sort By Summary">@Html.DisplayNameFor(model => model.Tasks[0].Name)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-assignee">
+                                            <span title="Sort By Assignee">@Html.DisplayNameFor(model => model.Tasks[0].ProjectName)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-priority defaultsort">
+                                            <span title="Sort By Priority">@Html.DisplayNameFor(model => model.Tasks[0].StatusId)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-status">
+                                            <span title="Sort By Status">@Html.DisplayNameFor(model => model.Tasks[0].DateStart)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-resolution">
+                                            <span title="Sort By Resolution">@Html.DisplayNameFor(model => model.Tasks[0].DateEnd)</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Tasks)
+                                    {
+                                        if (!item.IsPrivate || (item.IsPrivate && ControllerAccessAttribute.GetAccessPage("Task", "IsPrivateField")))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.ActionLink(item.Name, "Details", "Task", new { id = item.Id }, new { })
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink(item.ProjectName, "Index", "Project", new { id = item.ProjectId }, new { })
+                                                </td>
+                                                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetStatusKeyForSorttable(item.StatusId)">
+                                                    <span class="@item.GetColorForStatus">
+                                                        @Html.DisplayFor(modelItem => item.StatusName)
+                                                    </span>
+                                                </td>
+                                                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                                                    @Html.DisplayFor(modelItem => item.DateStart)
+                                                </td>
+                                                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                                                    @Html.DisplayFor(modelItem => item.DateEnd)
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="module toggle-wrap collapsed" id="activitymodule">
+                    <div class="mod-header">
+                        <h3 class="toggle-title">Проекты</h3>
+                    </div>
+                    <div class="mod-content hidden">
+                        <div class="ops-cont">
+                            <table id="issuetable" class="hide-carrot sortable">
+                                <thead>
+                                    <tr class="rowHeader">
+                                        <th class="colHeaderLink sortable headerrow-summary">
+                                            <span title="Sort By Summary">@Html.DisplayNameFor(model => model.Projects[0].Name)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-assignee defaultsort">
+                                            <span title="Sort By Assignee">@Html.DisplayNameFor(model => model.Projects[0].Status)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-priority">
+                                            <span title="Sort By Priority">@Html.DisplayNameFor(model => model.Projects[0].DateStart)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-status">
+                                            <span title="Sort By Status">@Html.DisplayNameFor(model => model.Projects[0].DateEnd)</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Projects)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                                            </td>
+                                            <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetStatusKeyForSorttable(item.Status.Id)">
+                                                <span class="@item.GetColorForStatus">
+                                                    @Html.DisplayFor(modelItem => item.Status.Name)
+                                                </span>
+                                            </td>
+                                            <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                                                @Html.DisplayFor(modelItem => item.DateStart)
+                                            </td>
+                                            <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                                                @Html.DisplayFor(modelItem => item.DateEnd)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh() || TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsCurrentUser(Model.Login))
+                {
+                    <hr />
+
+                    <div class="module toggle-wrap collapsed" id="timetrackmodule">
+                        <div class="mod-header">
+                            <h3 class="toggle-title">Опоздания/Отгулы/Отработки</h3>
+                        </div>
+                        <div class="mod-content hidden">
+                            <div class="ops-cont">
+                                <div class="c100 p100 big" style="margin-left: 44%;">
+                                    <span>@TimeTrackModel.TimeToString(TimeTrackModel.TimeSum(Model.TimeTrack))</span>
+                                    <div class="slice">
+                                        <div class="bar"></div>
+                                        <div class="fill"></div>
+                                    </div>
+                                </div>
+
+                                <div class="command-bar">
+                                    <div class="ops-cont">
+                                        <div class="ops-menus">
+                                            <ul id="opsbar-edit" class="first ops">
+                                                <li class="last">
+                                                    @Html.ActionLink("Создать новый", "Create", "TimeTrack", new { Login = Model.Login }, new { @class = "issueaction-edit-issue button edit first last" })
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <table id="issuetable" class="hide-carrot sortable">
+                                    <thead>
+                                        <tr class="rowHeader">
+                                            <th class="colHeaderLink sortable headerrow-priority">
+                                                <span title="Sort By Priority">@Html.DisplayNameFor(model => model.TimeTrack[0].Account.Name)</span>
+                                            </th>
+                                            <th class="colHeaderLink sortable headerrow-priority">
+                                                <span title="Sort By Priority">@Html.DisplayNameFor(model => model.TimeTrack[0].Type)</span>
+                                            </th>
+                                            <th class="colHeaderLink sortable headerrow-summary">
+                                                <span title="Sort By Summary">@Html.DisplayNameFor(model => model.TimeTrack[0].DateStart)</span>
+                                            </th>
+                                            <th class="colHeaderLink sortable headerrow-assignee">
+                                                <span title="Sort By Assignee">@Html.DisplayNameFor(model => model.TimeTrack[0].DateEnd)</span>
+                                            </th>
+                                            <th class="colHeaderLink sortable headerrow-status">
+                                                <span title="Sort By Status">@Html.DisplayNameFor(model => model.TimeTrack[0].Time)</span>
+                                            </th>
+                                            <th class="colHeaderLink sortable headerrow-status">
+                                                <span title="Sort By Status">@Html.DisplayNameFor(model => model.TimeTrack[0].Description)</span>
+                                            </th>
+                                            <th>
+                                                Действия
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.TimeTrack.OrderByDescending(x => x.DateStart))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.ActionLink(item.Account.Name, "Details", "Account", new { id = item.Account.Login }, new { @class = "user-hover" })
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Type)
+                                                </td>
+                                                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                                                    @TaskTrackingSystem.Models.ModelHelper.FormatDateTime(item.DateStart)
+                                                </td>
+                                                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                                                    @TaskTrackingSystem.Models.ModelHelper.FormatDateTime(item.DateEnd)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.TimeString)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Description)
+                                                </td>
+                                                <td>
+                                                    <a>
+                                                        @using (Html.BeginForm("Delete", "TimeTrack", new { id = item.Id, @login = item.Account.Login }, FormMethod.Post, new { @class = "inline", onsubmit = "return confirm('Удалить?');" }))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <button type="submit" class="btn btn-default" onsubmit="return confirm('Удалить?')">
+                                                                <img src="~/Content/img/empty-trash.png" />
+                                                            </button>
+                                                        }
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh() || Model.Login == TaskTrackingSystem.Logic.AccountBLL.CurrentUserLogin)
+                {
+                    <hr />
+
+                    <div class="module toggle-wrap collapsed" id="paylistkmodule">
+                        <div class="mod-header">
+                            <h3 class="toggle-title">Расчётный листок</h3>
+                        </div>
+                        <div class="mod-content hidden">
+                            <div class="ops-cont">
+                                @Html.Partial("~/Views/Account/Partial/PayListItem.cshtml", new PayList() { Login = Model.Login })                                
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/MyScripts/Sorttable/defaultsort.js"></script>
+<link href="~/Content/css-percentage-circle/css/circle.css" rel="stylesheet" />

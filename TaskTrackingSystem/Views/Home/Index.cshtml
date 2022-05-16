@@ -1,0 +1,36 @@
+﻿@{var access = TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.GetAccessForAccount(); }
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Главная страница</h2>
+<div>
+    @Html.ActionLink("Проекты", "", "ProjectType")
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        @Html.ActionLink("Компании", "", "Company")
+    </div>
+    <div>
+        @Html.ActionLink("Задачи СисАдмину", "CreateForSysAdmin", "Task")
+    </div>
+    <div>
+        @Html.ActionLink("Календарь", "", "Calendar")
+    </div>
+    if (access != null && access.UserListPage)
+    {
+        <div>
+            @Html.ActionLink("Пользователи", "", "Account")
+        </div>
+    }
+}
+
+@if (access!= null && access.AdminPage)
+{
+    <div>
+        @Html.ActionLink("Админка", "", "AdminPage")
+    </div>
+}

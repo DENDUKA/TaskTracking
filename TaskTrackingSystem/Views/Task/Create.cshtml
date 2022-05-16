@@ -1,0 +1,102 @@
+﻿@model TaskTrackingSystem.Models.TaskModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+
+@{
+    /**/
+
+    ViewBag.Title = "Create";
+}
+
+<h2>Создание новой задачи</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("projectId", Model.ProjectId)
+
+    <div class="form-horizontal">
+        <h4>@ViewData["projectName"]</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StatusId, Model.DropDownListStatuses, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountLogin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListAccounts, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AccountLogin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (ControllerAccessAttribute.GetAccessPage("Project", "StoryPointField"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.StoryPoints, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.StoryPoints, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.StoryPoints, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-6", @style = "min-width: 100%", @rows = "12" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Вернуться к списку", "Index", "Project", new { Id = ViewData["projectId"] }, new { })
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+
+    if ($('#DateStart').val() == '0001-01-01') {
+        $('#DateStart').val('');
+    }
+    if ($('#DateEnd').val() == '0001-01-01') {
+        $('#DateEnd').val('');
+    }
+</script>

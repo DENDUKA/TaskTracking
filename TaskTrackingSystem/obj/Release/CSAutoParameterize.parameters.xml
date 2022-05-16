@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="TaskTrackingSystem-Web.config Connection String" description="TaskTrackingSystem Строка подключения в web.config, используемая приложением для доступа к базе данных." defaultValue="Data Source=DENDUKA-PC;Initial Catalog=TaskTrackingSystem;Integrated Security=True" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="E:\\Programming\\G1UkerPrograms\\TaskTrackingSystem\\TaskTrackingSystem\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='TaskTrackingSystem']/@connectionString" />
+  </parameter>
+  <parameter name="TaskTrackingSystemEF-Web.config Connection String" description="TaskTrackingSystemEF Строка подключения в web.config, используемая приложением для доступа к базе данных." defaultValue="Data Source=DENDUKA-PC;Initial Catalog=TaskTrackingSystem;Integrated Security=True" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="E:\\Programming\\G1UkerPrograms\\TaskTrackingSystem\\TaskTrackingSystem\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='TaskTrackingSystemEF']/@connectionString" />
+  </parameter>
+  <parameter name="AccountConnect-Web.config Connection String" description="AccountConnect Строка подключения в web.config, используемая приложением для доступа к базе данных." defaultValue="data source=DENDUKA-PC;initial catalog=TaskTrackingSystem;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="E:\\Programming\\G1UkerPrograms\\TaskTrackingSystem\\TaskTrackingSystem\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AccountConnect']/@connectionString" />
+  </parameter>
+</parameters>

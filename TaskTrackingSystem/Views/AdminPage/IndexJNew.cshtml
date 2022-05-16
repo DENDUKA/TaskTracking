@@ -1,0 +1,81 @@
+﻿@{var access = TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.GetAccessForAccount();}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="alertHeader"></div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Home/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h2>Админка</h2>
+
+                <h5>
+                    @if (access.UserListPage)
+                    {
+                        @Html.ActionLink("Пользователи", "", "Account")
+                    }
+                </h5>
+                <h5>
+                    @Html.ActionLink("Patch Notes", "PatchNotes", "Home")
+                </h5>
+
+                <h5>
+                    @if (access.AccountAccessPage)
+                    {
+                        @Html.ActionLink("Настройки", "", "Settings")
+                    }
+                </h5>
+
+                <h5>
+                    @if (access.AccountAccessPage)
+                    {
+                        @Html.ActionLink("Найстройки доступа для пользователей", "", "AccountAccess")
+                    }
+                </h5>
+
+                <h5>
+                    @Html.ActionLink("Расчет премий", "Awards", "AdminPage")
+                </h5>
+
+                <h5>
+                    @Html.ActionLink("Загрузка расчётных листов", "PayList", "AdminPage")
+                </h5>
+
+                <h5>
+                    @Html.ActionLink("Wake-On-LAN", "Index", "WOL")
+                </h5>
+
+                @using (Html.BeginForm("ClearCache", "Home"))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="ClearCache" class="btn btn-default" />
+                }
+
+                @using (Html.BeginForm("SomeAction", "Home"))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="SomeAction" class="btn btn-default" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div id="sample">
+    
+    <script src="~/Scripts/NicEdit/nicEditNew.js"></script>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        bkLib.onDomLoaded(function () {
+            nicEditors.allTextAreas(); $('.nicEdit-panelContain').parent().css("width:90%");
+            $('.nicEdit-panelContain').parent().next().css("width:90%");
+            $('.nicEdit-main ').css("width:90%");
+        });
+        //]]>
+    </script>
+    
+    <textarea name="area3" style=" height: 100px;">
+       HTML content default in textarea
+    </textarea>
+</div>

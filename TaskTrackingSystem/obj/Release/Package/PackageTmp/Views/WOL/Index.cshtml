@@ -1,0 +1,137 @@
+﻿@using System.IO;
+
+@model TaskTrackingSystem.Models.PayListModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="alertHeader"></div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/AdminPage">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <br />
+
+                <div>
+
+                    <div class="ops-menus">
+                        <ul id="opsbar-edit" class="first ops">
+                            <li class="last">
+                                <a id="rescanbutton" class="issueaction-edit-issue button edit first last">
+                                    <span>ReScan</span>
+                                </a>
+                            </li>
+                            <li class="last">
+                                <a id="updatecurrentbutton" class="issueaction-edit-issue button edit first last">
+                                    <span>Обновить текущие</span>
+                                </a>
+                            </li>
+                            <li class="last">
+                                <a id="addnewrowbutton" class="issueaction-edit-issue button edit first last">
+                                    <span>Добавить новый</span>
+                                </a>
+                            </li>
+                            <li class="last">
+                                <a id="lastupdateinfo" class=" first last">
+                                    <span>Последнее обновление : </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="ops-cont">
+                    <table id="issuetable" class="hide-carrot sortable">
+                        <thead>
+                            <tr class="rowHeader">
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Id</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Account Login</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">IP</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">MAC</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">PC - Name</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Status</span>
+                                </th>
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model.PayList)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Login
+                                        </td>
+                                        <td>
+                                            @item.Date.Date.ToString()
+                                        </td>
+                                        <td>
+                                            @item.StatusBD
+                                        </td>
+                                        <td>
+                                            @item.ToPay
+                                        </td>
+                                        <td>
+                                            @item.Position
+                                        </td>
+                                        <td>
+                                            @item.Salary
+                                        </td>
+                                        <td>
+                                            @item.Error
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+<script src="~/Scripts/Awards/script.js"></script>
+<script src="~/signalr/hubs"></script>*@
+
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/SignalR/WOL.js"></script>

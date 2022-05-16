@@ -1,0 +1,251 @@
+﻿@using TaskTrackingSystem.UI.Web.Models;
+@using TaskTrackingSystem.Models
+@model IEnumerable<TaskTrackingSystem.UI.Web.Models.AccountAccessModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<table id="issuetable" class="hide-carrot">
+    <thead>
+        <tr class="rowHeader">
+            <th>
+                @Html.DisplayNameFor(model => model.Login)
+            </th>
+
+            @foreach (var meta in AccountAccessModel.MetaDataAA)
+            {
+                <th>
+                    @meta.DispalayName
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var access in Model)
+        {
+            <tr>
+                <td align="center">
+                    <span aadata aalogin>
+                        @Html.DisplayFor(modelItem => access.Login)
+                    </span>
+                </td>
+
+                @foreach (var meta in AccountAccessModel.MetaDataAA)
+                {
+                    <td align="center">
+                        <input @meta.BackName aadata @{var check = ModelHelper.GetBoolValue(access, meta.FieldName) ? "checked" : null;} @check type="checkbox">
+                    </td>
+                }
+            </tr>
+
+            <tr>
+                <td>
+                    <button Login="@access.Login" type="button" class="btn btn-default dropdown-toggle PTA" data-toggle="dropdown">
+                        ProjectType <span class="caret"></span>
+                    </button>
+                </td>
+            </tr>
+
+            <tr class="PTA" Login="@access.Login" hidden>
+                <th></th>
+                <th colspan="100">
+
+                    <div class="dropDownWidth" align="center">
+                        ProjectType
+                    </div>
+
+                    @foreach (var item in AccountAccessModel.MetaDataPTA)
+                    {
+                        <div class="checkboxWidth" align="center">
+                            @item.DispalayName
+                        </div>
+                    }
+                </th>
+            </tr>
+            foreach (var pta in access.ProjectTypeAccesses)
+            {
+                <tr class="PTA" Login="@access.Login" hidden>
+                    <td></td>
+                    <td colspan="100" pta-id="@pta.Id">
+                        <div>
+                            <div class="dropDownWidth">
+                                @Html.DropDownListFor(model => pta.Id, access.DropDownListProjectType(pta.ProjectTypeId), new { @class = "form-control parentWidth", @ptadata = "", @ptaID = "" })
+                            </div>
+                            <span>
+                                @foreach (var meta in AccountAccessModel.MetaDataPTA)
+                                {
+                                    <div class="checkboxWidth" align="center">
+                                        <input class="check-box" @{var check = ModelHelper.GetBoolValue(pta, meta.FieldName) ? "checked" : null;} @check type="checkbox" ptadata @meta.BackName>
+                                    </div>
+                                }
+                                <div class="checkboxWidth">
+                                    <button type="button" class="btn btn-default" onclick="OnDeleteProjectType(this)">
+                                        Удалить
+                                    </button>
+                                </div>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+            <tr class="PTA" Login="@access.Login" hidden>
+                <td></td>
+                <td colspan="100" pta-id="">
+                    <div class="dropDownWidth">
+                        @Html.DropDownListFor(model => access.ProjectTypeAccesses, access.DropDownListProjectType(null), new { @class = "form-control parentWidth", @ptadata = "", @ptaID = "", @onchange = "OnCreateProjectType(this)" })
+                    </div>
+                    <span hidden pta-access-checkboxes>
+
+                        @foreach (var meta in AccountAccessModel.MetaDataPTA)
+                        {
+                            <div class="checkboxWidth">
+                                <input class="check-box" type="checkbox" ptadata @meta.BackName>
+                            </div>
+                        }
+                        <div class="checkboxWidth">
+                            <button type="button" class="btn btn-default" onclick="OnDeleteProjectType(this)">
+                                Удалить
+                            </button>
+                        </div>
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<table>
+    <tr class="PTA" Login="" pta-blueprint>
+        <td></td>
+        <td colspan="100" pta-id="">
+            <div class="dropDownWidth">
+                @Html.DropDownListFor(model => model.First().ProjectTypeAccesses, Model.First().DropDownListProjectType(null), new { @class = "form-control parentWidth", @ptadata = "", @ptaID = "", @onchange = "OnCreateProjectType(this)" })
+            </div>
+            <span hidden pta-access-checkboxes>
+
+                @foreach (var meta in AccountAccessModel.MetaDataPTA)
+                {
+                    <div class="checkboxWidth">
+                        <input class="check-box" type="checkbox" ptadata @meta.BackName>
+                    </div>
+                }
+                <div class="checkboxWidth">
+                    <button type="button" class="btn btn-default" onclick="OnDeleteProjectType(this)">
+                        Удалить
+                    </button>
+                </div>
+            </span>
+        </td>
+    </tr>
+</table>
+
+<script src="~/Scripts/MyScripts/Calendar/URLHelper.js"></script>
+
+<script>
+    $("button.PTA").click(function () {
+        var login = $(this).attr("Login");
+        element = $("tr.PTA[Login='" + login + "']");
+
+        var attr = element.attr('hidden');
+
+        if (typeof attr !== typeof undefined && attr !== false) {
+            element.removeAttr("hidden");
+        } else {
+            element.attr("hidden", true);
+        }
+    });
+
+    $("[aadata]").change(async function () {
+        var row = $(this).parents("tr");
+
+        var response = await $.post(getURLForRequest('AccountAccess', 'UpdateAccountAccess'), {
+            'accLogin': row.find('[aalogin]').text().replace(/^\s*/, '').replace(/\s*$/, ''),
+            'data[]': [
+                    @foreach (var meta in AccountAccessModel.MetaDataAA)
+                    {
+                        string attr = $"row.find('[{meta.BackName}]').is(':checked'),";
+                        @Html.Raw(attr);
+                    }
+                 ]
+        });
+
+    });
+
+    function PTAChangeEvent() {
+        var ptadata = $("[ptadata]");
+
+        ptadata.unbind("change");
+
+        ptadata.change(async function () {
+
+            var row = $(this).parents("td");
+
+            var response = await $.post(getURLForRequest('AccountAccess', 'UpdateProjectTypeAccess'), {
+                'id': row.attr("pta-id"),
+                'ptid': row.find('[ptaID]').val(),
+                'data[]': [
+                    @foreach (var meta in AccountAccessModel.MetaDataPTA)
+                    {
+                        string attr = $"row.find('[{meta.BackName}]').is(':checked'),";
+                        @Html.Raw(attr);
+                    }
+                 ]
+            });
+        });
+    };
+
+    async function OnDeleteProjectType(thiselem) {
+        var row = $(thiselem).parents("td");
+
+        var response = await $.post(getURLForRequest('AccountAccess', 'DeleteProjectTypeAccess'), {
+            'ptaid': row.attr("pta-id"),
+        });
+
+        console.log(response);
+
+        row.parents("tr.PTA").remove();
+
+        console.log("OnDeleteProjectType");
+
+    };
+
+    async function OnCreateProjectType(thiselem) {
+        var elem = $(thiselem);
+
+        var row = elem.parents("tr.PTA");
+        elem.removeAttr("onchange");
+        elem.find("option[value='0']").remove();
+
+        var login = row.attr("Login");
+        row.find("[pta-access-checkboxes]").removeAttr("hidden");
+
+        var newId = await $.post(getURLForRequest('AccountAccess', 'CreateProjectTypeAccess'), {
+            'ptID': row.find('[ptaID]').val(),
+            'login': login,
+        });
+
+        row.find("[pta-id]").attr("pta-id", newId);
+
+        var newRow = $("tr[pta-blueprint]").clone();
+        newRow.removeAttr("pta-blueprint");
+        newRow.attr("login", login);
+
+        newRow.insertAfter(row);
+
+        PTAChangeEvent();
+
+
+        console.log("OnCreateProjectType");
+    };
+
+
+    $(document).ready(function () {
+        PTAChangeEvent();
+    });
+
+</script>
+
+<link href="~/Content/Site/AccessTable.css" rel="stylesheet" />

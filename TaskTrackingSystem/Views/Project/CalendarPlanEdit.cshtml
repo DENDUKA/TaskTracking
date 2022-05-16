@@ -1,0 +1,76 @@
+﻿@model TaskTrackingSystem.Models.ProjectModel
+
+@{
+    ViewBag.Title = "CalendarPlanEdit";
+}
+
+<h2>CalendarPlanEdit</h2>
+
+
+<h4>ProjectModel</h4>
+<hr />
+
+@Html.HiddenFor(model => model.Id, new { @id = "projectId" })
+
+<div class="row">
+    <div class="col-1 table-bordered">
+        <b>№ Этапа</b>
+    </div>
+    <div class="col-5 table-bordered">
+        <b>Виды работ</b>
+    </div>
+    <div class="col-5 table-bordered">
+        <b>Сроки выполнения работ</b>
+    </div>
+</div>
+
+@if (Model.CalendarPlan != null)
+{
+    foreach (var item in Model.CalendarPlan.CalendarPlanItems)
+    {
+        <div class="row">
+            <div class="col-1 table-bordered">
+                <input onfocusout="Update(this)" StageNum min="0" max="999" type="number" value="@item.StageNum">
+            </div>
+            <div class="col-5 table-bordered">
+                <textarea onfocusout="Update(this)" WorkType rows="3" class="col-12">@item.WorkType</textarea>
+            </div>
+            <div class="col-5 table-bordered">
+                <textarea onfocusout="Update(this)" Deadlines rows="3" class="col-12">@item.Deadlines</textarea>
+            </div>
+            <div class="col-1">
+                <button deleteButton id="@item.Id" onclick="ButtonRemove(this)" class="btn btn-danger">-</button>
+            </div>
+        </div>
+    }
+}
+
+<div id="AddRow" class="row">
+    <div class="col-11"></div>
+    <div class="col-1">
+        <button id="AddButton" class="btn btn-success" onclick="ButtonAdd(this)">+</button>
+    </div>
+</div>
+
+<div id="RowTemplate" style="display:none;" class="row">
+    <div class="col-1 table-bordered">
+        <input onfocusout="Update(this)" StageNum min="0" max="999" type="number" value="0">
+    </div>
+    <div class="col-5 table-bordered">
+        <textarea onfocusout="Update(this)" WorkType rows="3" class="col-12"></textarea>
+    </div>
+    <div class="col-5 table-bordered">
+        <textarea onfocusout="Update(this)" Deadlines rows="3" class="col-12"></textarea>
+    </div>
+    <div class="col-1">
+        <button deleteButton onclick="ButtonRemove(this)" class="btn btn-danger">-</button>
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Back to List", "CalendarPlan", "Project", new { id = Model.Id }, new { })
+</p>
+
+
+<script src="~/Scripts/MyScripts/CalendarPlanEdit/CalendarPlanEdit.js"></script>
+<script src="~/Scripts/MyScripts/Calendar/URLHelper.js"></script>

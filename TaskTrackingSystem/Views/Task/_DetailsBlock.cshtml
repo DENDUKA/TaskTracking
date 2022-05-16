@@ -1,0 +1,94 @@
+﻿@using TaskTrackingSystem.CustomAuthorizeAttribute;
+
+@model TaskTrackingSystem.Models.TaskModel
+
+@{
+    var isApproved = Model.IsApproved ? "btn-status-selected" : "";
+    bool isChangeAccess = Model.ApproveAccess;
+    var isChangeAccessS = isChangeAccess ? "" : "";
+}
+
+
+
+<div id="details-module" class="module toggle-wrap">
+    <div class="mod-header">
+        <h3 class="toggle-title">Детали</h3>
+    </div>
+    <div class="mod-content">
+        <ul id="issuedetails" class="property-list two-cols">
+            <li class="item">
+                <div class="wrap">
+                    <strong class="name">Статус :</strong>
+                    <span class="value">
+                        @if (Model.StatusName.Equals(TaskTrackingSystem.Shared.Entities.Status.Deleted) && ControllerAccessAttribute.GetAccessPage("Task", "Restore"))
+                        {
+                            using (Html.BeginForm("Restore", "Task"))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input id="Id" type="hidden" value="@Model.Id" name="Id" />
+                                <input type="submit" value="Восстановить" class="btn-status btn-status-selected" />
+                            }
+                        }
+                        else if (ControllerAccessAttribute.GetAccessPage("Task", "Edit"))
+                        {
+                            <div>
+                                @using (Html.BeginForm())
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input id="StatusId" type="hidden" value="@Model.StatusId" name="StatusId" />
+                                    <input id="ProjectId" type="hidden" value="@Model.ProjectId" name="StatusId" />
+
+                                    foreach (var x in Model.DropDownListStatuses)
+                                    {
+                                        if (x.Value != Model.StatusId.ToString())
+                                        {
+                                            <input type="submit" value="@x.Text" class="btn-status" onclick="$('#StatusId').val('@x.Value')" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="@x.Text" class="btn-status btn-status-selected" onclick="$('#StatusId').val('@x.Value')" disabled />
+                                        }
+                                    }
+
+                                    if (Model.StatusId == TaskTrackingSystem.Shared.Entities.Status.DoneId && isChangeAccess)
+                                    {
+                                        <input id="approveButton" type="button" value="Подтверждено" class="btn-status @isApproved" @isChangeAccess />
+                                    }
+                                }
+                            </div>
+                        }
+                    </span>
+                </div>
+            </li>
+            @if (ControllerAccessAttribute.GetAccessPage("Project", "StoryPointField"))
+            {
+                <li class="item item-right">
+                    <div class="wrap">
+                        <strong class="name">Оценка :</strong>
+                        <span class="value">
+                            @Model.StoryPoints
+                        </span>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div id="descriptionmodule" class="module toggle-wrap">
+    <div class="mod-header">
+        <h3 class="toggle-title">Описание</h3>
+    </div>
+    <div id="issue-description" class="mod-content">
+        <div class="description-panel" contenteditable="false" style="margin: 4px; min-height: 254px; overflow: hidden; border:1px solid grey">
+            @Html.Raw(Model.Description)
+        </div>
+    </div>
+</div>
+
+@if (isChangeAccess)
+{
+    <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/MyScripts/TaskHub/TaskHub.js"></script>
+}

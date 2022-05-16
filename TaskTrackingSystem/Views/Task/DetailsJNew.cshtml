@@ -1,0 +1,58 @@
+﻿@using TaskTrackingSystem.Shared.Entities;
+
+@model TaskTrackingSystem.Models.TaskModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage(0, Model.ProjectId, Model.Id);}
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@*<h2>@Model.Name</h2>
+
+    <p>
+        @Html.ActionLink("Главная", "Index", "Home") /
+        @Html.ActionLink("Категория проектов", "Index", "ProjectType") /
+        @Html.ActionLink(ViewData["ProjectTypeName"].ToString(), "Details", "ProjectType", new { id = ViewData["ProjectTypeId"] }, new { }) /
+        @Html.ActionLink(ViewData["ProjectName"].ToString(), "Index", "Project", new { id = Model.ProjectId }, new { }) /
+        @Model.Name
+    </p>*@
+
+
+<div class="alertHeader"></div>
+
+<input id="Id" type="hidden" value="@Model.Id"/>
+
+<div class="item-header">
+    <span class="link">@Html.ActionLink("Главная", "Index", "Home") /</span>
+    <span class="link">@Html.ActionLink("Категория проектов", "Index", "ProjectType") /</span>
+    <span class="link">@Html.ActionLink(ViewData["ProjectTypeName"].ToString(), "Details", "ProjectType", new { id = ViewData["ProjectTypeId"] }, new { }) /</span>
+    <span class="link">@Html.ActionLink(ViewData["ProjectName"].ToString(), "Index", "Project", new { id = Model.ProjectId }, new { })</span>
+    <h2 class="link">@Html.ActionLink(Model.Name, "Details", "Task", new { id = Model.Id }, new { })</h2>
+    @if (Model.IsPrivate)
+    {
+        <span class="link" style="background: #bfbfbf; padding: 2px;">Приватная</span>
+    }
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column primary">
+            <div class="content">
+                @Html.Partial("_ButtonsBlock")
+
+                @Html.Partial("_DetailsBlock", Model)
+
+                @Html.Partial("_ActivityBlock", Model)
+            </div>
+        </div>
+        <div class="column secondary">
+            <div class="content">
+                @Html.Partial("_PeopleBlock", new List<Account> { Model.Account, Model.Reporter })
+                
+                @Html.Partial("_DatesBlock", new List<DateTime> { Model.DateStart, Model.DateEnd})
+            </div>
+        </div>
+    </div>
+</div>

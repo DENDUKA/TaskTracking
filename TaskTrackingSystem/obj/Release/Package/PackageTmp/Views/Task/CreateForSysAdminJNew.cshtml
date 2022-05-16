@@ -1,0 +1,85 @@
+﻿@model TaskTrackingSystem.Models.TaskModel
+
+@{
+    ViewBag.Title = "CreateForSysAdmin";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Создание новой задачи для Системного Администратора</h2>
+    <h4>@ViewData["projectName"]</h4>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href='~/'>
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("projectId", Model.ProjectId)
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div>
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { })
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { })
+                            @Html.DropDownListFor(model => model.StatusId, Model.DropDownListStatuses, new { @class = "form-control" })
+                        </div>
+
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-6", @style = "min-width: 100%", @rows = "12" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="command-bar">
+                        <div class="ops-cont">
+                            <div class="ops-menus">
+                                <ul id="opsbar-edit" class="first ops">
+                                    <li class="last">
+                                        <input type="submit" value="Сохранить" class="issueaction-edit-issue button edit first last" />
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/NicEdit/nicEditNew.js"></script>
+<script src="~/Scripts/NicEdit/NicEditInitialization.js"></script>

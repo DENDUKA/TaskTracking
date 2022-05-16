@@ -1,0 +1,49 @@
+﻿@model TaskTrackingSystem.Shared.Entities.PayList
+
+<div class="form-group">
+    <div class="col-md-9">
+        @Html.DropDownList(" ", TaskTrackingSystem.Models.PayListModel.YearsToSelectedList(), new { id = "plyear", @class = "form-control" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-9">
+        @Html.DropDownList(" ", TaskTrackingSystem.Models.PayListModel.MonthToSelectedList(), new { id = "plmonth", @class = "form-control" })
+    </div>
+</div>
+
+<table id="plTable">
+</table>
+
+<link href="~/Content/bootstrap-table.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    $(function (){
+        $('#plyear').change(function(){
+            changePLTable();
+        });
+
+        $('#plmonth').change(function(){
+            changePLTable();
+        });
+    })
+
+    $(document).ready(function () {
+        changePLTable();
+    });
+
+    function changePLTable() {
+            var table = $("#plTable");
+            var month = $("#plmonth").val();
+            var year = $("#plyear").val();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("PayListItemTable","AdminPage")?login=' + '@Model.Login' + '&month=' + month + '&year=' + year,
+                success: function (data) {
+                    table.replaceWith(data);
+                }
+			});
+        }
+</script>

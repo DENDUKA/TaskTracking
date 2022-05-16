@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TaskTrackingSystem.Models.ProjectTypeModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="alertHeader"></div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Home/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h2>
+                    @Html.DisplayNameFor(model => model.Name)
+                </h2>
+
+                @foreach (var item in Model)
+                {
+
+                    <h5>
+                        @Html.ActionLink(item.Name, "Details", "ProjectType", new { id = item.Id }, new { })
+                    </h5>
+                }
+            </div>
+        </div>
+    </div>
+</div>

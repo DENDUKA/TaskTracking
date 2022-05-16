@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище TaskTrackingSystemModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="Login" />
+    </Key>
+    <Property Name="Login" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Role" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="80" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "TaskTrackingSystem.dbo.CalendarDiaryEvent" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="CalendarDiaryEvent">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="DateStart" />
+      <PropertyRef Name="DateEnd" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="DateStart" Type="date" Nullable="false" />
+    <Property Name="DateEnd" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CalendarPlan">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="StageNum" Type="int" Nullable="false" />
+    <Property Name="WorkType" Type="text" Nullable="false" />
+    <Property Name="Deadlines" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Form" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="AdditionalNumber" Type="int" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" />
+    <Property Name="CompanyId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Responsible" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="DateStart" Type="date" Nullable="false" />
+    <Property Name="DateEnd" Type="date" Nullable="false" />
+    <Property Name="ProjectType" Type="int" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="Customer" Type="nvarchar" MaxLength="100" />
+    <Property Name="ContractNumber" Type="nvarchar" MaxLength="100" />
+    <Property Name="Cost" Type="money" />
+    <Property Name="CompanyId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProjectPathToFile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="150" />
+    <Property Name="Path" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="ProjectType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "TaskTrackingSystem.dbo.Settings" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Task">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="DateStart" Type="date" Nullable="false" />
+    <Property Name="DateEnd" Type="date" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="Project" Type="int" Nullable="false" />
+    <Property Name="Account" Type="nvarchar" MaxLength="100" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="StoryPoints" Type="int" />
+  </EntityType>
+  <EntityType Name="TaskLogs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="TaskId" Type="int" Nullable="false" />
+    <Property Name="Time" Type="datetime" Nullable="false" />
+    <Property Name="FieldName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UserLogin" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ChangedValue" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NewValue" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CalendarPlan_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="CalendarPlan" Type="Self.CalendarPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CalendarPlan">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Employee_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Login" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="Responsible" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_ProjectType">
+    <End Role="ProjectType" Type="Self.ProjectType" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ProjectType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectPathToFile_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="ProjectPathToFile" Type="Self.ProjectPathToFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProjectPathToFile">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Login" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Account" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="GetDiaryEventInRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fromDate" Type="date" Mode="In" />
+    <Parameter Name="toDate" Type="date" Mode="In" />
+  </Function>
+  <Function Name="GetProjectById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProjectId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetProjectsByProjectTypeId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProjectTypeId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetProjectsForAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Login" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="GetProjectsForCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyId" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="GetProjectStoryPoints" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProjectId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetTaskById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TaskId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetTasksByProjectId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProjectId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetTasksForAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Login" Type="nvarchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="Хранилище TaskTrackingSystemModelContainer">
+    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CalendarPlan" EntityType="Self.CalendarPlan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProjectPathToFile" EntityType="Self.ProjectPathToFile" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProjectType" EntityType="Self.ProjectType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TaskLogs" EntityType="Self.TaskLogs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CalendarDiaryEvent" EntityType="Self.CalendarDiaryEvent" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [CalendarDiaryEvent].[ID] AS [ID], 
+    [CalendarDiaryEvent].[Name] AS [Name], 
+    [CalendarDiaryEvent].[DateStart] AS [DateStart], 
+    [CalendarDiaryEvent].[DateEnd] AS [DateEnd]
+    FROM [dbo].[CalendarDiaryEvent] AS [CalendarDiaryEvent]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_CalendarPlan_Project" Association="Self.FK_CalendarPlan_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="CalendarPlan" EntitySet="CalendarPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Employee_Company" Association="Self.FK_Employee_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Employee" EntitySet="Employee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Account" Association="Self.FK_Project_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Company" Association="Self.FK_Project_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_ProjectType" Association="Self.FK_Project_ProjectType">
+      <End Role="ProjectType" EntitySet="ProjectType" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Status" Association="Self.FK_Project_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectPathToFile_Project" Association="Self.FK_ProjectPathToFile_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="ProjectPathToFile" EntitySet="ProjectPathToFile" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_Account" Association="Self.FK_Task_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_Project" Association="Self.FK_Task_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_Status" Association="Self.FK_Task_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

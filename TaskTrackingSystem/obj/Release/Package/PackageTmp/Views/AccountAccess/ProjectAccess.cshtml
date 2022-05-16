@@ -1,0 +1,189 @@
+﻿@using TaskTrackingSystem.UI.Web.Models;
+@using TaskTrackingSystem.Models;
+@model IEnumerable<TaskTrackingSystem.UI.Web.Models.AccountAccessModel>
+
+@{
+    ViewBag.Title = "ProjectAccess";
+}
+
+<h2>@ViewBag.ProjectName</h2>
+
+<hr />
+<h3>Настройка доступа к проекту</h3>
+
+<table class="table">
+    <tr class="PA">
+        <th></th>
+        <th colspan="100">
+            <div class="dropDownWidth">
+                Account Login
+            </div>
+            @foreach (var meta in AccountAccessModel.MetaDataPA)
+            {
+                <div class="checkboxWidth">
+                    @meta.DispalayName
+                </div>
+            }
+        </th>
+    </tr>
+
+    @foreach (var pa in Model.SelectMany(aa => aa.ProjectAccesses).ToList().FindAll(pa => pa.ProjectId == ViewBag.ProjectId).OrderBy(pa => pa.Id))
+    {
+        <tr class="PA">
+            <td></td>
+            <td colspan="100" pa-id="@pa.Id">
+                <div>
+                    <div class="dropDownWidth">
+                        @Html.DropDownListFor(model => pa.Id, TaskTrackingSystem.Models.ModelHelper.GetDropDownListAccounts(pa.AccountLogin, false), new { @class = "form-control parentWidth", @padata = "", @paID = "" })
+                    </div>
+                    <spqn>
+                        @foreach (var meta in AccountAccessModel.MetaDataPA)
+                        {
+                            <div class="checkboxWidth">
+                                <input class="check-box" @{var check = ModelHelper.GetBoolValue(pa, meta.FieldName) ? "checked" : null;} @check type="checkbox" padata @meta.BackName>
+                            </div>
+                        }
+                        <div class="checkboxWidth">
+                            <button type="button" class="btn btn-default" onclick="OnDeleteProject(this)">
+                                Удалить
+                            </button>
+                        </div>
+                    </spqn>
+                </div>
+            </td>
+        </tr>
+    }
+
+    <tr class="PA" Login="">
+        <td></td>
+        <td colspan="100" pa-id="">
+            <div class="dropDownWidth">
+                @Html.DropDownListFor(model => model.First().ProjectAccesses, TaskTrackingSystem.Models.ModelHelper.GetDropDownListAccounts(), new { @class = "form-control parentWidth", @padata = "", @paID = "", @onchange = "OnCreateProject(this)" })
+            </div>
+            <span hidden pa-access-checkboxes>
+                @foreach (var meta in AccountAccessModel.MetaDataPA)
+                {
+                    <div class="checkboxWidth">
+                        <input class="check-box" type="checkbox" padata @meta.BackName>
+                    </div>
+                }
+                <div class="checkboxWidth">
+                    <button type="button" class="btn btn-default" onclick="OnDeleteProject(this)">
+                        Удалить
+                    </button>
+                </div>
+            </span>
+        </td>
+    </tr>
+
+
+</table>
+
+
+<table hidden>
+    <tr class="PA" Login="" pa-blueprint>
+        <td></td>
+        <td colspan="100" pa-id="">
+            <div class="dropDownWidth">
+                @Html.DropDownListFor(model => model.First().ProjectAccesses, TaskTrackingSystem.Models.ModelHelper.GetDropDownListAccounts(), new { @class = "form-control parentWidth", @padata = "", @paID = "", @onchange = "OnCreateProject(this)" })
+            </div>
+            <span hidden pa-access-checkboxes>
+
+                @foreach (var meta in AccountAccessModel.MetaDataPA)
+                {
+                    <div class="checkboxWidth">
+                        <input class="check-box" type="checkbox" padata @meta.BackName>
+                    </div>
+                }
+
+                <div class="checkboxWidth">
+                    <button type="button" class="btn btn-default" onclick="OnDeleteProject(this)">
+                        Удалить
+                    </button>
+                </div>
+            </span>
+        </td>
+    </tr>
+</table>
+
+
+
+<p>
+    @Html.ActionLink("Назад", "Index", "Project", new { @Id = ViewBag.ProjectId }, new { })
+</p>
+
+<link href="~/Content/Site/AccessTable.css" rel="stylesheet" />
+<script src="~/Scripts/MyScripts/Calendar/URLHelper.js"></script>
+
+
+<script>
+    async function OnDeleteProject(thiselem) {
+        var row = $(thiselem).parents("td");
+
+        var response = await $.post(getURLForRequest('AccountAccess', 'DeleteProjectAccess'), {
+            'paID': row.attr("pa-id"),
+        });
+
+        console.log(response);
+        row.parents("tr.PA").remove();
+        console.log("OnDeleteProject");
+    };
+
+
+    async function OnCreateProject(thiselem) {
+        var elem = $(thiselem);
+
+        var row = elem.parents("tr.PA");
+        elem.removeAttr("onchange");
+        elem.find("option[value='']").remove();
+
+        var login = elem.val();
+        row.find("[pa-access-checkboxes]").removeAttr("hidden");
+
+        var newId = await $.post(getURLForRequest('AccountAccess', 'CreateProjectAccess'), {
+            'paID': @ViewBag.ProjectID,
+            'login': login,
+        });
+
+        row.find("[pa-id]").attr("pa-id", newId);
+
+
+        var newRow = $("tr[pa-blueprint]").clone();
+        newRow.removeAttr("pa-blueprint");
+        newRow.attr("login", login);
+
+        newRow.insertAfter(row);
+
+        PAChangeEvent();
+
+        console.log("OnCreateProjectAccess");
+    };
+
+    function PAChangeEvent() {
+        var padata = $("[padata]");
+
+        padata.unbind("change");
+
+        padata.change(async function () {
+
+            var row = $(this).parents("td");
+
+            if (row.attr("pa-id") != "") {
+                var response = await $.post(getURLForRequest('AccountAccess', 'UpdateProjectAccess'), {
+                    'id': row.attr("pa-id"),
+                    'accountLogin': row.find('[paID]').val(), 'data[]': [
+                    @foreach (var meta in AccountAccessModel.MetaDataPA)
+                    {
+                        string attr = $"row.find('[{meta.BackName}]').is(':checked'),";
+                        @Html.Raw(attr);                       
+                    }
+                 ]
+                });
+            }
+        });
+    };
+
+    $(document).ready(function () {
+        PAChangeEvent();
+    });
+</script>

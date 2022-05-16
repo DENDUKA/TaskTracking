@@ -1,0 +1,144 @@
+﻿@using FullCalendar
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage();}
+
+@model TaskTrackingSystem.Models.CalendarModel
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/MyScripts/Calendar/URLHelper.js"></script>
+<script src="~/Scripts/fullcalendar.min.js"></script>
+<script src="~/Scripts/fullcalendar.helper.min.js"></script>
+<script src="~/Scripts/locale/ru.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/MyScripts/Calendar/CalendarHelper.js"></script>
+<script src="~/Scripts/MyScripts/Calendar/CalendarModalWindowAddNew.js"></script>
+<script src="~/Scripts/Helpers/DateFormate.js"></script>
+<script src="~/Scripts/MyScripts/Calendar/CalendarModalWindowActions.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="~/Content/fullcalendar.min.css" rel="stylesheet" />
+
+
+<script>
+    document.oncontextmenu = function () { return false };
+</script>
+
+@{
+    ViewBag.Title = "Календарь";
+}
+
+<div class="alertHeader"></div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Home/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                                @if (ControllerAccessAttribute.GetAccessPage("Calendar", "EventChangeDateStart"))
+                                {
+                                    <li id="create-event" class="last" style="padding: 0; line-height: 1.429; border: 0;">
+                                        <a class="issueaction-edit-issue button edit first last">
+                                            <span>Create new event</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                @Html.FullCalendar(settings =>
+                {
+                    settings.Name = "calendar";
+                    settings.CssClass = "css-test";
+                    settings.Header = new Header
+                    {
+                        Left = new ControlsBuilder().AddButton(HeaderButton.Prev).AddSeparator(HeaderSeparator.Adjacent)
+                            .AddButton(HeaderButton.Next).AddSeparator(HeaderSeparator.Gap).AddButton(HeaderButton.Today),
+                        Center = new ControlsBuilder().AddTitle(),
+                        Right = new ControlsBuilder("month ")
+                    };
+                    settings.DefaultView = AvailableView.Month.ToString();
+                    settings.AllDaySlot = false;
+                    settings.Selectable = false;
+                    settings.SlotDuration = TimeSpan.FromMinutes(15);
+                    settings.Events = Events.AsJsonFeed(Url.Action("GetDiaryEvents", "Calendar"));
+                    settings.Locale = "ru";
+                    settings.DisplayEventTime = false;
+                    settings.EventLimit = 6;
+                    settings.FirstDay =  DayOfWeek.Monday;
+                    settings.EventStartEditable = ControllerAccessAttribute.GetAccessPage("Calendar","EventChangeDateStart");
+
+                    settings.ClientSideEvents.EventRender = @"
+                    function (event, element) {
+                            element.bind('mousedown', function (e) {
+                            if (e.which == 3) {
+                                dialog = $('#dialog-form-actions').dialog('open');
+                                globalSelectableEvent = event;
+                                $('#dialog-form-actions-label').text(event.title);
+                            }
+                        })}";
+
+                    settings.ClientSideEvents.EventDrop = @"function(event, delta, revertFunc) {
+                        $.post(getURLForRequest('Calendar', 'EventChangeDateStart'), { 'eventId': event.id, 'dateStart' : event.start.format(), 'dateEnd' : event.end.format() });
+                    }";
+                })
+                @if (ControllerAccessAttribute.GetAccessPage("Calendar", "EventChangeDateStart"))
+                {
+                    <div id="dialog-form" title="Новое событие">
+                        <div class="form-horizontal" style="width:260px">
+                            <div class="form-group">
+                                <label class="col-12" for="Name">Название</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" data-val="true" id="Name" name="Name" type="text" value="">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-12" for="DateStart">Дата начала</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" data-val="true" id="DateStart" type="date">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="DateStart" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-12" for="DateEnd">Дата завершения</label>
+                                <div class="col-md-10">
+                                    <input class="form-control text-box single-line" data-val="true" id="DateEnd" type="date">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="DateEnd" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dialog-form-actions" title="Действия c">
+                        <div class="form-horizontal" style="width:260px">
+                            <div class="form-group">
+                                <label id="dialog-form-actions-label" class="col-12" for="Name"></label>
+                                <div class="col-md-10">
+                                    <input id="dialog-form-actions-delete" value="Delete" type="button" class="btn btn-default">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        var globalSelectableEvent;
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

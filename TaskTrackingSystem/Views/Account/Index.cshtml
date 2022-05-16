@@ -1,0 +1,94 @@
+﻿@model IEnumerable<TaskTrackingSystem.UI.Web.Models.AccountModel>
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage();}
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Аккаунты</h2>
+
+@if (ControllerAccessAttribute.GetAccessPage("Account", "Create"))
+{
+    <div>
+        @Html.ActionLink("Добавить пользователя", "Create")
+    </div>
+}
+
+<table class="table sortable">
+    <tr class="active">
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Login)
+        </th>
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.Role)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.PCName)
+        </th>
+        <th class="col-xs-1 sorttable_nosort">
+            @if (ControllerAccessAttribute.GetAccessPage("Account", "PasswordField"))
+            {
+                @Html.DisplayNameFor(model => model.Password)
+            }
+        </th>
+        <th class="col-xs-1 sorttable_nosort">
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Login, "Details", "Account", new { id = item.Login }, new { })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PCName)
+            </td>
+            <td>
+                @if (ControllerAccessAttribute.GetAccessPage("Account", "PasswordField"))
+                {
+                    @Html.DisplayFor(modelItem => item.Password)
+                }
+            </td>
+            <td>
+
+                @if (ControllerAccessAttribute.GetAccessPage("Account", "Update"))
+                {
+                    <a href="~/Account/Update/@item.Login">
+                        <button class="btn btn-default btn-sm" type="button">
+                            <span class="glyphicon glyphicon-edit" />
+                        </button>
+                    </a>
+                }
+
+                @if (ControllerAccessAttribute.GetAccessPage("Account", "Create"))
+                {
+                    using (Html.BeginForm("Delete", "Account", new { login = item.Login, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-default btn-sm" onsubmit="return confirm('Удалить?')">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,133 @@
+﻿@model TaskTrackingSystem.Models.ProjectModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage(Convert.ToInt32(ViewData["projectTypeId"]));}
+
+@{
+    /**/
+
+    ViewBag.Title = "Create";
+}
+
+<h2>Создание нового проекта</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("projectTypeId", Model.ProjectTypeId)
+
+    <div class="form-horizontal">
+        <h4>@ViewData["projectTypeName"]</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountLogin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListAccounts, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AccountLogin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StatusId, Model.DropDownListStatuses, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContractNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContractNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContractNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.Hidden("CompanyId", Model.CompanyId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CompanyId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="CompaniesInput" type="text" list="CompaniesDL" autocomplete="off" class="input-validation-error form-control text-box single-line">
+                <datalist id="CompaniesDL">
+                    @foreach (var company in Model.Companies)
+                    {
+                        <option id="@company.Id" value="@company.Name" />
+                    }
+                </datalist>
+                @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Вернуться к списку", "Details", "ProjectType", new { id = ViewData["projectTypeId"] }, new { })
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+    if ($('#DateStart').val() == '0001-01-01') {
+        $('#DateStart').val('');
+    }
+    if ($('#DateEnd').val() == '0001-01-01') {
+        $('#DateEnd').val('');
+    }
+
+    $(document).ready(function () {
+
+        //Евент : записываем в скрытое поле CompanyId значение выбранное в CompaniesInput списке
+        $("#CompaniesInput").focusout(function () {
+            g = $('#CompaniesInput').val();
+            id = $('#CompaniesDL').find('option[value="' + g + '"]').attr('id');
+            $("#CompanyId").val(id);
+        });
+
+        //Заполняем предвыбранное значение в CompaniesInput списке
+        $('#CompaniesInput').val($('#CompaniesDL').find('option[id="' + $("#CompanyId").val() + '"]').attr('value'));
+    });
+</script>

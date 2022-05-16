@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Хранилище TaskTrackingSystemModelContainer" CdmEntityContainer="TaskTrackingSystemContext">
+    <EntitySetMapping Name="Account">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="Login" ColumnName="Login" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CalendarPlan">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.CalendarPlan">
+        <MappingFragment StoreEntitySet="CalendarPlan">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="StageNum" ColumnName="StageNum" />
+          <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+          <ScalarProperty Name="Deadlines" ColumnName="Deadlines" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Company">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.Company">
+        <MappingFragment StoreEntitySet="Company">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Form" ColumnName="Form" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employee">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="AdditionalNumber" ColumnName="AdditionalNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Project">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.Project">
+        <MappingFragment StoreEntitySet="Project">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Responsible" ColumnName="Responsible" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectPathToFile">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.ProjectPathToFile">
+        <MappingFragment StoreEntitySet="ProjectPathToFile">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectType">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.ProjectType">
+        <MappingFragment StoreEntitySet="ProjectType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Status">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.Status">
+        <MappingFragment StoreEntitySet="Status">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Task">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.Task">
+        <MappingFragment StoreEntitySet="Task">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="Account" ColumnName="Account" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="StoryPoints" ColumnName="StoryPoints" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TaskLogs">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.TaskLogs">
+        <MappingFragment StoreEntitySet="TaskLogs">
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+          <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
+          <ScalarProperty Name="ChangedValue" ColumnName="ChangedValue" />
+          <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CalendarDiaryEvent">
+      <EntityTypeMapping TypeName="TaskTrackingSystemModel.CalendarDiaryEvent">
+        <MappingFragment StoreEntitySet="CalendarDiaryEvent">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetDiaryEventInRange" FunctionName="Хранилище TaskTrackingSystemModel.GetDiaryEventInRange">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetDiaryEventInRange_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetProjectById" FunctionName="Хранилище TaskTrackingSystemModel.GetProjectById">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetProjectById_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Responsible" ColumnName="Responsible" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="AccName" ColumnName="AccName" />
+          <ScalarProperty Name="AccRole" ColumnName="AccRole" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+          <ScalarProperty Name="PtName" ColumnName="PtName" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetProjectsByProjectTypeId" FunctionName="Хранилище TaskTrackingSystemModel.GetProjectsByProjectTypeId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetProjectsByProjectTypeId_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Responsible" ColumnName="Responsible" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="AccName" ColumnName="AccName" />
+          <ScalarProperty Name="AccRole" ColumnName="AccRole" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+          <ScalarProperty Name="PtName" ColumnName="PtName" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetProjectsForAccount" FunctionName="Хранилище TaskTrackingSystemModel.GetProjectsForAccount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetProjectsForAccount_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+          <ScalarProperty Name="PtName" ColumnName="PtName" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetProjectsForCompany" FunctionName="Хранилище TaskTrackingSystemModel.GetProjectsForCompany">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetProjectsForCompany_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Responsible" ColumnName="Responsible" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
+          <ScalarProperty Name="PtName" ColumnName="PtName" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="AccName" ColumnName="AccName" />
+          <ScalarProperty Name="AccRole" ColumnName="AccRole" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetProjectStoryPoints" FunctionName="Хранилище TaskTrackingSystemModel.GetProjectStoryPoints" />
+    <FunctionImportMapping FunctionImportName="GetTaskById" FunctionName="Хранилище TaskTrackingSystemModel.GetTaskById">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetTaskById_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="StoryPoints" ColumnName="StoryPoints" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="AccountLogin" ColumnName="AccountLogin" />
+          <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetTasksByProjectId" FunctionName="Хранилище TaskTrackingSystemModel.GetTasksByProjectId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetTasksByProjectId_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="StoryPoints" ColumnName="StoryPoints" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="AccountLogin" ColumnName="AccountLogin" />
+          <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetTasksForAccount" FunctionName="Хранилище TaskTrackingSystemModel.GetTasksForAccount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TaskTrackingSystemModel.GetTasksForAccount_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="StoryPoints" ColumnName="StoryPoints" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="ProjectId1" ColumnName="ProjectId1" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

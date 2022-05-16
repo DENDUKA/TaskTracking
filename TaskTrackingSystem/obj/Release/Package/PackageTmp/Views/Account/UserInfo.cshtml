@@ -1,0 +1,18 @@
+﻿@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <span class="glyphicon glyphicon-user">
+        Вошли как @Html.ActionLink(User.Identity.Name, "Details", "Account", new { id = User.Identity.Name }, new { })
+    </span>
+    <span class="glyphicon">
+        @Html.ActionLink("Выйти ", "Logout", "Account", new { id = "" }, null)
+    </span>
+}
+else
+{
+    <span>
+        Гость
+    </span>
+    <span class="glyphicon">
+        @Html.ActionLink("Войти", "Login", "Account")
+    </span>
+}

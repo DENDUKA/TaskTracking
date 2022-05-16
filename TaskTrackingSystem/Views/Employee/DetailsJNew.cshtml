@@ -1,0 +1,93 @@
+﻿@model TaskTrackingSystem.Models.EmployeeModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Сотрудник компании : @Model.Company.Form @Model.Company.Name</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Company/Details/@Model.CompanyId">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    @Html.ActionLink("Редактировать", "Edit", "Employee", new { id = Model.Id }, new { @class = "issueaction-edit-issue button edit first last" })
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="column primary">
+                    <div class="mod-content">
+                        <ul id="issuedetails" class="property-list two-cols">
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">
+                                        @Html.DisplayNameFor(model => model.Name) :
+                                    </strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Name)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">
+                                        @Html.DisplayNameFor(model => model.Email) :
+                                    </strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Email)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">
+                                        @Html.DisplayNameFor(model => model.PhoneNumber) :
+                                    </strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.DisplayPhoneNumber)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">
+                                        @Html.DisplayNameFor(model => model.AddititionalNumber) :
+                                    </strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.AddititionalNumber)
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="column secondary" style="min-height: 55px;">
+                    <div class="content">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

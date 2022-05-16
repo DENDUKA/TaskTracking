@@ -1,0 +1,35 @@
+﻿@using TaskTrackingSystem.Shared.Entities
+@model List<Account>
+
+@{
+    var Assignee = Model[0];
+    var Reporter = Model[1];
+}
+
+
+<div class="module toggle-wrap expanded" id="peoplemodule">
+    <div id="peoplemodule_heading" class="mod-header">
+        <h3 class="toggle-title">People</h3>
+    </div>
+    <div class="mod-content">
+        <ul class="item-details" id="peopledetails">
+            <li class="people-details">
+                <dl>
+                    <dt>Исполнитель : </dt>
+                    <dd id="assignee-val">
+                        @Html.ActionLink(Assignee.Name, "Details", "Account", new { id = Assignee.Login }, new { @class = "user-hover" })
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>Создал : </dt>
+                    <dd id="reporter-val">
+                        @if (Reporter != null && !string.IsNullOrEmpty(Reporter.Login))
+                        {
+                            @Html.ActionLink(Reporter.Name, "Details", "Account", new { id = Reporter.Login }, new { @class = "user-hover" })
+                        }
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>

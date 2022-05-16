@@ -1,0 +1,31 @@
+﻿@model List<DateTime>
+@{
+    var dateStart = Model[0];
+    var dateEnd = Model[1];
+}
+
+<div class="module toggle-wrap" id="datesmodule">
+    <div id="datesmodule_heading" class="mod-header">
+        <h3 class="toggle-title">
+            Даты
+        </h3>
+    </div>
+    <div class="mod-content">
+        <ul class="item-details">
+            <li>
+                <dl class="dates">
+                    <dt>Начало :</dt>
+                    <dd id="create-date" class="date user-tz" title="@dateStart.ToString("dd.MM.yyyy")">
+                        <time>@dateStart.ToString("dd.MM.yyyy")</time>
+                    </dd>
+                </dl>
+                <dl class="dates">
+                    <dt>Завершение :</dt>
+                    <dd id="updated-date" class="date user-tz" title="@dateEnd.ToString("dd.MM.yyyy")">
+                        <time>@dateEnd.ToString("dd.MM.yyyy")</time>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>

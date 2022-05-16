@@ -1,0 +1,125 @@
+﻿@model TaskTrackingSystem.Shared.Entities.PayList
+
+@if (Model != null)
+{
+    <table id="plTable" class="table table-bordered">
+        <tbody>
+            <tr>
+                <td colspan="9">@Model.Title</td>
+            </tr>
+            <tr>
+                <td colspan="5"><b>@Model.Name</b></td>
+                <td colspan="2">К выплате:</td>
+                <td colspan="2"><b>@Model.ToPay</b></td>
+            </tr>
+            <tr>
+                <td colspan="2">Организация: </td>
+                <td colspan="2">@Model.Organization</td>
+                <td colspan="2">Должность:</td>
+                <td colspan="3">@Model.Position</td>
+            </tr>
+            <tr>
+                <td colspan="2">Оклад: </td>
+                <td colspan="2"><b>@Model.Salary</b></td>
+                <td colspan="5"></td>
+
+            </tr>
+            <tr>
+                <td colspan="1">Вид </td>
+                <td colspan="1">Период</td>
+                <td colspan="2">Рабочие</td>
+                <td colspan="2"></td>
+                <td colspan="2">Сумма</td>
+
+            </tr>
+            <tr>
+                <td colspan="2"> </td>
+                <td colspan="1">Дни</td>
+                <td colspan="1">Часы</td>
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>Начислено:</b></td>
+                <td colspan="4"></td>
+                <td colspan="3"><b>@Model.Accrued</b></td>
+            </tr>
+            @foreach (var item in Model.AccruedItems)
+            {
+                <tr>
+                    <td colspan="1">@item.Type</td>
+                    <td colspan="1">@item.Period</td>
+                    <td colspan="1">@item.Days</td>
+                    <td colspan="1">@item.Hours</td>
+                    <td colspan="2"></td>
+                    <td colspan="2">@item.Summa</td>
+                </tr>
+            }
+
+            <tr>
+                <td colspan="9"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><b>Удержано:</b></td>
+                <td colspan="4"></td>
+                <td colspan="3"><b>@Model.Hold</b></td>
+            </tr>
+            @foreach (var item in Model.HoldItems)
+            {
+                <tr>
+                    <td colspan="1">@item.Type</td>
+                    <td colspan="1">@item.Period</td>
+                    <td colspan="4"></td>
+                    <td colspan="2">@item.Summa</td>
+                </tr>
+            }
+
+            <tr>
+                <td colspan="9"></td>
+            </tr>
+
+            @{var paid = Model.PaidItems.Sum(x => x.Summa);}
+            <tr>
+                <td colspan="2"><b>Выплачено:</b></td>
+                <td colspan="4"></td>
+                <td colspan="3"><b>@paid</b></td>
+            </tr>
+
+            @foreach (var item in Model.PaidItems)
+            {
+                <tr>
+                    <td colspan="1">@item.Type</td>
+                    <td colspan="1">@item.Period</td>
+                    <td colspan="4"></td>
+                    <td colspan="2">@item.Summa</td>
+                </tr>
+            }
+
+            <tr>
+                <td colspan="9"></td>
+            </tr>
+
+            <tr>
+                <td colspan="1">Долг предприятия на начало</td>
+                <td colspan="1">@Model.DebtCompanyStartMonth</td>
+                <td colspan="1">Долг предприятия на конец</td>
+                <td colspan="1">@Model.DebtWorkerStartMonth</td>
+            </tr>
+
+            <tr>
+                <td colspan="9"></td>
+            </tr>
+
+            <tr>
+                <td colspan="9">@Model.TotalTaxableIncome</td>
+            </tr>
+
+
+
+        </tbody>
+    </table>
+}
+else
+{
+    <table id="plTable"><tr><td>Нет Данных</td></tr></table>
+}

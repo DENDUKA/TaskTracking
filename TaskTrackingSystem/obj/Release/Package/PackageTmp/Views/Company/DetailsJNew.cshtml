@@ -1,0 +1,256 @@
+﻿@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage();}
+
+@model TaskTrackingSystem.Models.CompanyModel
+
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>
+        Компания : @Model.Name
+    </h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Company/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    @Html.ActionLink("Редактировать", "Edit", "Company", new { id = Model.Id }, new { @class = "issueaction-edit-issue button edit first last" })
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="column primary">
+                    <div class="mod-content">
+                        <ul id="issuedetails" class="property-list two-cols">
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Name) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Name)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Email) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Email)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.PhoneNumber) :</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.PhoneNumber)
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name">@Html.DisplayNameFor(model => model.Form):</strong>
+                                    <span class="value">
+                                        @Html.DisplayFor(model => model.Form)
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="column secondary" style="min-height: 55px;">
+                    <div class="content">
+                        <span></span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div id="details-module" class="module toggle-wrap">
+                    <div class="mod-header">
+                        <h3 class="toggle-title">Сотрудники</h3>
+                    </div>
+
+                    <div class="command-bar">
+                        <div class="ops-cont">
+                            <div class="ops-menus">
+                                <ul id="opsbar-edit" class="first ops">
+                                    <li class="last">
+                                        <a class="issueaction-edit-issue button edit first last" href="~/Employee/Create?CompanyId=@Model.Id">
+                                            <span>Создать нового</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mod-content">
+                        <div class="ops-cont">
+                            <table id="issuetable" class="hide-carrot sortable">
+                                <thead>
+                                    <tr class="rowHeader">
+                                        <th class="colHeaderLink sortable headerrow-summary">
+                                            <span title="Sort By Summary">@Html.DisplayNameFor(model => model.Employees[0].Name)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-assignee">
+                                            <span title="Sort By Assignee">@Html.DisplayNameFor(model => model.Employees[0].Email)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-priority defaultsort">
+                                            <span title="Sort By Priority">@Html.DisplayNameFor(model => model.Employees[0].PhoneNumber)</span>
+                                        </th>
+
+                                        <th class="colHeaderLink sortable headerrow-status">
+                                            <span title="Sort By Status">@Html.DisplayNameFor(model => model.Employees[0].AddititionalNumber)</span>
+                                        </th>
+                                        @if (ControllerAccessAttribute.GetAccessPage("Company", "Delete"))
+                                        {
+                                            <th>
+                                                Действия
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Employees)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.ActionLink(item.Name, "Details", "Employee", new { id = item.Id }, new { })
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AddititionalNumber)
+                                            </td>
+                                            @if (ControllerAccessAttribute.GetAccessPage("Company", "Delete"))
+                                            {
+                                                <td>
+                                                    <a href="~/Employee/Edit/@item.Id">
+                                                        <button class="btn btn-default" type="button">
+                                                            <img src="~/Content/img/edit.png" />
+                                                        </button>
+                                                    </a>
+
+                                                    @using (Html.BeginForm("Delete", "Employee", new { id = item.Id }, FormMethod.Post, new { @class = "inline", onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="btn btn-default" onsubmit="return confirm('Удалить?')">
+                                                            <img src="~/Content/img/empty-trash.png" />
+                                                        </button>
+                                                    }
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div id="activitymodule" class="module toggle-wrap">
+                    <div class="mod-header">
+                        <h3 class="toggle-title">Проекты</h3>
+                    </div>
+                    <div class="mod-content">
+                        <div class="ops-cont">
+                            <table id="issuetable" class="hide-carrot sortable">
+                                <thead>
+                                    <tr class="rowHeader">
+                                        <th class="colHeaderLink sortable headerrow-summary">
+                                            <span title="Sort By Summary">@Html.DisplayNameFor(model => model.Projects[0].Name)</span>
+                                        </th>
+                                        <th class="colHeaderLink sortable headerrow-assignee">
+                                            <span title="Sort By Assignee">@Html.DisplayNameFor(model => model.Projects[0].Account)</span>
+                                        </th>
+                                        <th class="colHeaderLink sortable headerrow-priority defaultsort">
+                                            <span title="Sort By Priority">@Html.DisplayNameFor(model => model.Projects[0].ContractNumber)</span>
+                                        </th>
+                                        <th class="colHeaderLink sortable headerrow-priority defaultsort">
+                                            <span title="Sort By Priority">@Html.DisplayNameFor(model => model.Projects[0].Cost)</span>
+                                        </th>
+                                        <th class="colHeaderLink sortable headerrow-status defaultsort">
+                                            <span title="Sort By Status">@Html.DisplayNameFor(model => model.Projects[0].Status)</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Projects)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink(item.Account.Name, "Details", "Account", new { id = item.Account.Login }, new { })
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ContractNumber)
+                                            </td>
+
+                                            @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                                            {
+                                                <td>
+                                                    @{string paidColor = item.Paid == item.Cost ? "text-success" : "text-danger";}
+                                                    <span class="@paidColor">
+                                                        @if (item.Paid == item.Cost)
+                                                        {
+                                                            @Html.DisplayFor(modelItem => item.Cost)
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DisplayFor(modelItem => item.Paid)
+                                                            <span>/</span>
+                                                            @Html.DisplayFor(modelItem => item.Cost)
+                                                        }
+                                                    </span>
+                                                </td>
+                                            }
+                                            <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetStatusKeyForSorttable(item.Status.Id)">
+                                                <span class="@item.GetColorForStatus">
+                                                    @Html.DisplayFor(modelItem => item.Status.Name)
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/MyScripts/Sorttable/defaultsort.js"></script>

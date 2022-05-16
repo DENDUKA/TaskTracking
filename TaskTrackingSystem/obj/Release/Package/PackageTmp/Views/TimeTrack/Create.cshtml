@@ -1,0 +1,106 @@
+﻿@model TaskTrackingSystem.Models.TimeTrackModel
+
+@using TaskTrackingSystem.Models;
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Добавить "Опоздания/Отгулы/Отработки"</h2>
+</div>
+
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href='~/ProjectType/Details/@Request.Params["projectTypeId"]'>
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                    {
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.AccountLogin, htmlAttributes: new { })
+                            @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListAccounts, new { @class = "form-control" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.AccountLogin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.Hidden("AccountLogin", TaskTrackingSystem.Models.ModelHelper.CurrentUserLogin)
+                    }
+
+                    <div class="field-group">
+                        @Html.LabelFor(model => model.DateStart, htmlAttributes: new { })
+                        @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.DateStartTime, new { htmlAttributes = new { @class = "form-control" } })
+                        <div>
+                            @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.DateStartTime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { })
+                        @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.DateEndTime, new { htmlAttributes = new { @class = "form-control" } })
+                        <div>
+                            @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.DateEndTime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        @Html.LabelFor(model => model.Type, htmlAttributes: new { })
+                        @Html.DropDownListFor(model => model.Type, Model.DropDownListTypes, new { @class = "form-control" })
+                    </div>
+
+                    <div class="field-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        <div>
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="command-bar">
+                        <div class="ops-cont">
+                            <div class="ops-menus">
+                                <ul id="opsbar-edit" class="first ops">
+                                    <li class="last">
+                                        <input type="submit" value="Создать" class="issueaction-edit-issue button edit first last" />
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

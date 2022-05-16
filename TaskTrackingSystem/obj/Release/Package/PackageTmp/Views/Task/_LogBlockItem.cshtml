@@ -1,0 +1,65 @@
+﻿@model TaskTrackingSystem.Shared.Entities.ActionLog
+
+
+<div class="issue-data-block activity-comment twixi-block expanded">
+    <div class="twixi-wrap concise actionContainer">
+        <div class="action-details flooded">
+
+            <span>
+                @Html.ActionLink(Model.Account.Name, "Details", "Account", new { id = Model.Account.Login }, new { }) обновил поле <b>@Model.FieldName</b> @Model.Time
+
+
+            </span>
+
+
+            <ul class="property-list two-cols log-item">
+                <li class="item">
+                    <div class="wrap">
+                        <strong class="name">Старое значение :</strong>
+                    </div>
+                </li>
+
+                <li class="item item-right">
+                    <div class="wrap">
+                        <strong class="name">Новое значение :</strong>
+                    </div>
+                </li>
+
+                <li class="item">
+                    <div>
+                        <span>
+
+                            @if (Model.FieldName.Equals("Описание"))
+                            {
+                                <span class="description-view-panel">
+                                    @Html.Raw(Model.ChangedValue)
+                                </span>
+                            }
+                            else
+                            {
+                                @Model.ChangedValue
+                            }
+                        </span>
+                    </div>
+                </li>
+
+                <li class="item item-right">
+                    <div class="item-borderleft">
+                        <span>
+                            @if (Model.FieldName.Equals("Описание"))
+                            {
+                                <span class="description-view-panel">
+                                    @Html.Raw(Model.NewValue)
+                                </span>
+                            }
+                            else
+                            {
+                                @Model.NewValue
+                            }
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

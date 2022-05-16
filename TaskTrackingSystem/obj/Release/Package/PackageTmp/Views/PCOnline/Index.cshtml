@@ -1,0 +1,51 @@
+﻿@model TaskTrackingSystem.Models.PCOnline.PCOnlineModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div>
+
+    <table class="table sortable table-hover">
+        <tr>
+            <th class="col-md-2">
+                IP
+            </th>
+            <th class="col-md-2">
+                HostName
+            </th>
+            <th class="col-md-2">
+                IsOnline
+            </th>
+        </tr>
+        @foreach (var item in Model.CorrentStatuses)
+        {
+            <tr>
+                <td>
+                    @item.Ip
+                </td>
+                <td>
+                    @item.HostName
+                </td>
+                <td>
+                    @if (item.IsOnline)
+                    {
+                        <span class="glyphicon glyphicon-globe" style="font-size:25px;color:green;"/>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-globe" style="font-size:25px;color:red;"/>
+                    }
+
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Вернуться к списку", "Index")
+</p>

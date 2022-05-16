@@ -1,0 +1,180 @@
+﻿@model TaskTrackingSystem.UI.Web.Models.AccountModel
+
+@{
+    ViewBag.Title = "Update";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Редактирование аккаунта : @Model.Name</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Account/Details/@Model.Login">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.Hidden("Login", Model.Login)
+                    @Html.Hidden("Role", Model.Role)
+
+                    <div>
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { })
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "inputtext input-width" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Password, htmlAttributes: new { })
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control text-box single-line" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { })
+                            <div class="input-group-addon">@@</div>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control text-box single-line" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.PCName, htmlAttributes: new { })
+                            @Html.EditorFor(model => model.PCName, new { htmlAttributes = new { @class = "form-control text-box single-line" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.PCName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.IsHidden, htmlAttributes: new { })
+                            @Html.CheckBox("IsHidden", Model.IsHidden)
+                            <div>
+                                @Html.ValidationMessageFor(model => model.IsHidden, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+
+                        @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdmin())
+                        {
+                            <div class="field-group">
+                                <label><b>Резюме :</b></label>
+                            </div>
+
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Post, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Post, new { htmlAttributes = new { @class = "form-control" } })
+
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.Post, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Department, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Department, new { htmlAttributes = new { @class = "form-control" } })
+
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.DateBirth, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.DateBirth, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control" })                                
+
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.DateBirth, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Education, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Education, new { htmlAttributes = new { @class = "form-control" } })
+
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.Education, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Responsibilities, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextAreaFor(model => model.Responsibilities, 5, 50, new { htmlAttributes = new { @class = "form-control" } })
+
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.Responsibilities, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.Hidden("Post", Model.Post)
+
+                            @Html.Hidden("Department", Model.Department)
+                            @Html.Hidden("DateBirth", Model.DateBirth)
+                            @Html.Hidden("Education", Model.Education)
+                            @Html.Hidden("Post", Model.Responsibilities)
+                        }
+
+                        @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                        {
+
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Wage, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Wage, new { htmlAttributes = new { @class = "form-control" } })
+
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.Wage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.Hidden("Wage", Model.Wage)
+                        }
+
+                        <hr />
+
+                        <div class="command-bar">
+                            <div class="ops-cont">
+                                <div class="ops-menus">
+                                    <ul id="opsbar-edit" class="first ops">
+                                        <li class="last">
+                                            <input type="submit" value="Сохранить" class="issueaction-edit-issue button edit first last" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

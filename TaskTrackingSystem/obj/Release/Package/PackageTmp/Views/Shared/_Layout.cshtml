@@ -1,0 +1,46 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracking</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap-grid.css" rel="stylesheet" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/sorttable.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("ЦГМ НИР Поволжья", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+
+
+            <div class="navbar-right navbar-brand">
+                <div class="collapse navbar-collapse">
+                    @Html.Action("UserInfo", "Account")
+                </div>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+</body>
+</html>

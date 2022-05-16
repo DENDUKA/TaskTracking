@@ -1,0 +1,185 @@
+﻿@using TaskTrackingSystem.Models;
+
+@model TaskTrackingSystem.Models.TaskModel
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage(0, Model.ProjectId, Model.Id);}
+
+@{
+    /**/
+
+    ViewBag.Title = "Details";
+}
+<h2>@Model.Name</h2>
+
+<p>
+    @Html.ActionLink("Главная", "Index", "Home") /
+    @Html.ActionLink("Категория проектов", "Index", "ProjectType") /
+    @Html.ActionLink(ViewData["ProjectTypeName"].ToString(), "Details", "ProjectType", new { id = ViewData["ProjectTypeId"] }, new { }) /
+    @Html.ActionLink(ViewData["ProjectName"].ToString(), "Index", "Project", new { id = Model.ProjectId }, new { }) /
+    @Model.Name
+</p>
+
+
+@if (Model.StatusName.Equals(TaskTrackingSystem.Shared.Entities.Status.Deleted) && ControllerAccessAttribute.GetAccessPage("Task", "Restore"))
+{
+    using (Html.BeginForm("Restore", "Task"))
+    {
+        @Html.AntiForgeryToken()
+        <input id="Id" type="hidden" value="@Model.Id" name="Id" />
+        <input type="submit" value="Восстановить" class="btn btn-default" />
+    }
+}
+
+@if (ControllerAccessAttribute.GetAccessPage("Task", "Edit"))
+{
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <input id="StatusId" type="hidden" value="0" name="StatusId" />
+
+            foreach (var x in Model.DropDownListStatuses)
+            {
+                if (x.Value != Model.StatusId.ToString())
+                {
+                    <input type="submit" value="@x.Text" class="btn btn-default" onclick="$('#StatusId').val('@x.Value')" />
+                }
+                else
+                {
+                    <input type="submit" value="@x.Text" class="btn btn-primary" onclick="$('#StatusId').val('@x.Value')" disabled />
+                }
+            }
+        }
+    </div>
+}
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DateStart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateStart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateEnd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateEnd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Account)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Account.Name, "Details", "Account", new { id = Model.Account.Login }, new { })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reporter)
+        </dt>
+
+        <dd>
+            @if (Model.Reporter != null && !string.IsNullOrEmpty(Model.Reporter.Login))
+            {
+                @Html.ActionLink(Model.Reporter.Name, "Details", "Account", new { id = Model.Reporter.Login }, new { })
+            }
+        </dd>
+
+        @if (ControllerAccessAttribute.GetAccessPage("Project", "StoryPointField"))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.StoryPoints)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.StoryPoints)
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            <div contenteditable="false" rows="12" style="margin: 4px; min-height: 254px; overflow: hidden; border:1px solid grey">
+
+                @Html.Raw(Model.Description)
+
+            </div>
+        </dd>
+    </dl>
+</div>
+<p>
+    @if (ControllerAccessAttribute.GetAccessPage("Task", "TaskResponsible"))
+    {
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id });
+        <span>|</span>
+    }
+
+    @Html.ActionLink("Вернуться к списку", "Index", "Project", new { id = Model.ProjectId }, new { })
+</p>
+
+@if (ControllerAccessAttribute.GetAccessPage("Task", "ChengeHistoryTask"))
+{
+    <h3>История изменений :</h3>
+
+    foreach (var log in Model.Logs)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    Обновил : @Html.ActionLink(log.UserName, "Details", "Account", new { id = log.UserLogin }, new { })
+                </div>
+                <div class="col">
+                    @log.TimeOfChange
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Поле :
+                </div>
+                <div class="col">
+                    @log.FieldName
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <b>Старое значение :</b>
+                </div>
+                <div class="col">
+                    <b>Новое значение :</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    @if (log.FieldName.Equals("Описание"))
+                    {@Html.Raw(log.ChangedValue)}
+                    else
+                    {@log.ChangedValue}
+                </div>
+
+                <div class="col">
+                    @if (log.FieldName.Equals("Описание"))
+                        {@Html.Raw(log.NewValue)}
+                    else
+                        {@log.NewValue}
+                </div>
+            </div>
+        </div>
+        <hr />
+    }
+}

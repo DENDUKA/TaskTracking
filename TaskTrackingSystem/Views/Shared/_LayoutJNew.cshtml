@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracking</title>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/sorttable.js"></script>
+    <link href="~/Content/bootstrap-icons.css" rel="stylesheet" />
+
+
+    @*<link href="~/Content/themes/JNewStyle/JStyle.css" rel="stylesheet" />*@
+
+    <link href="~/Content/themes/JNewStyle/JNewStyle.css" rel="stylesheet" />
+
+    <link href="~/Content/themes/JNewStyle/JNewStyleHeader.css" rel="stylesheet" />
+
+    <script src="~/Scripts/JStyle/BlockExpand.js"></script>
+</head>
+
+
+<body>
+    <div class="header">
+        <div >
+            <a id="logo" href="@Url.Action("Index", "Home")">
+                <img src="~/Content/img/mainLogo.svg" width="300" height="100" alt="ЦГМ НИР Поволжья">
+            </a>
+
+            <div class="header-link-container login-section" style="font-size: 18px;">
+                @Html.Action("UserInfo", "Account")
+            </div>
+        </div>
+    </div>
+
+
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+
+                @Html.ActionLink("ЦГМ НИР Поволжья", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+
+            <div class="navbar-right navbar-brand">
+                <div class="collapse navbar-collapse">
+                    @Html.Action("UserInfo", "Account")
+                </div>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+
+    </div>*@
+
+    <div class="">
+        @RenderBody()
+    </div>
+
+</body>
+</html>

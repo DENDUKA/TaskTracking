@@ -1,0 +1,272 @@
+﻿@model TaskTrackingSystem.Models.ProjectTypeModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{
+    /**/
+
+    ControllerAccessAttribute.FillFromPage(Model.Id);
+    var restoreAccess = ControllerAccessAttribute.GetAccessPage("Project", "Restore");
+}
+
+<script src="~/Scripts/MyScripts/Sorttable/defaultsort.js"></script>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <span class="link">@Html.ActionLink("Главная", "Index", "Home") /</span>
+    <span class="link">@Html.ActionLink("Категория проектов", "Index", "ProjectType")</span>
+    <h2 class="link">@Html.ActionLink(Model.Name, "Index", "Project", new { id = Model.Id }, new { })</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/ProjectType/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    @Html.ActionLink("Создать новый", "Create", "Project", new { projectTypeId = Model.Id }, new { @class = "issueaction-edit-issue button edit first last" })
+                                </li>
+                            </ul>
+                        </div>
+
+                        @if (ControllerAccessAttribute.GetAccessPage("ProjectType", "Exel"))
+                        {
+                            using (Html.BeginForm("Exel", "ProjectType", new { projectTypeId = Model.Id, startDate = Model.ExcelStart, endDate = Model.ExcelEnd }, FormMethod.Post, null))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div style="float:right; background-color:white; padding-left:10px">
+                                    <div>
+                                        @Html.EditorFor(model => Model.ExcelStart, new { htmlAttributes = new { id = "ExcelStart", @class = "form-control" } })
+                                    </div>
+                                    <div>
+                                        @Html.EditorFor(model => Model.ExcelEnd, new { htmlAttributes = new { id = "ExcelEnd", @class = "form-control" } })
+                                    </div>
+                                    @*@Html.DisplayFor(modelItem => Model.ExcelStart)
+                                        @Html.DisplayFor(modelItem => Model.ExcelEnd)*@
+                                    <div>
+                                        <button style="float:right; border:none; background:white;" type="submit">Экспорт : <img style="width:30px;" src="~/fonts/exelIcon.png" /></button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="ops-cont">
+                    <table id="issuetable" class="hide-carrot sortable">
+                        <thead>
+                            <tr class="rowHeader">
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span title="Sort By Summary">@Html.DisplayNameFor(model => model.ProjectList[0].Name)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-assignee">
+                                    <span title="Sort By Assignee">@Html.DisplayNameFor(model => model.ProjectList[0].CompanyId)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-priority">
+                                    <span title="Sort By Priority">@Html.DisplayNameFor(model => model.ProjectList[0].ContractNumber)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-status">
+                                    <span title="Sort By Status">@Html.DisplayNameFor(model => model.ProjectList[0].Account)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-resolution">
+                                    <span title="Sort By Resolution">@Html.DisplayNameFor(model => model.ProjectList[0].DateStart)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-created">
+                                    <span title="Sort By Created">@Html.DisplayNameFor(model => model.ProjectList[0].DateEnd)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-created defaultsort">
+                                    <span>@Html.DisplayNameFor(model => model.ProjectList[0].Status)</span>
+                                </th>
+
+                                @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                                {
+                                    <th class="colHeaderLink sortable headerrow-created">
+                                        <span>@Html.DisplayNameFor(model => model.ProjectList[0].ContractStatus)</span>
+                                    </th>
+
+                                    <th class="colHeaderLink sortable headerrow-created">
+                                        <span>@Html.DisplayNameFor(model => model.ProjectList[0].DateEndFact)</span>
+                                    </th>
+                                }
+
+                                @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                                {
+                                    <th class="colHeaderLink sortable headerrow-updated">
+                                        <span>@Html.DisplayNameFor(model => model.ProjectList[0].Cost)</span>
+                                    </th>
+                                }
+
+                                @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                                {
+                                    <th class="colHeaderLink sortable headerrow-updated">
+                                        <span>@Html.DisplayNameFor(model => model.ProjectList[0].PremiumPaid)</span>
+                                    </th>
+                                }
+
+                                @if (ControllerAccessAttribute.GetAccessPage("Project", "ProjectResponsible"))
+                                {
+                                    <th>
+                                        Действия
+                                    </th>
+                                }
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ProjectList)
+                            {
+                                if (item.Status.Id != TaskTrackingSystem.Shared.Entities.Status.DeletedId || restoreAccess)
+                                {
+                                    <tr bdId="@item.Id">
+                                        <td>
+                                            @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink(item.Company.Name, "Details", "Company", new { id = item.CompanyId }, new { })
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ContractNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ResponsiblesString)
+                                        </td>
+                                        <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                                            @Html.DisplayFor(modelItem => item.DateStart)
+                                        </td>
+                                        <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                                            @Html.DisplayFor(modelItem => item.DateEnd)
+                                        </td>
+                                        <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetStatusKeyForSorttable(item.Status.Id)">
+                                            <span class="@item.GetColorForStatus">
+                                                @Html.DisplayFor(modelItem => item.Status.Name)
+                                            </span>
+                                        </td>
+
+                                        @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                                        {
+                                            <td sorttable_customkey="@item.ContractStatus">
+                                                @Html.DisplayFor(modelItem => item.ContractStatus)
+                                            </td>
+
+                                            <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEndFact)">
+                                                @(item.DateEndFact != TaskTrackingSystem.DAL.DAL.DALHelper.MinDateTimeSQL? item.DateEndFact.ToShortDateString() : "")
+                                            </td>
+                                        }
+
+                                        @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                                        {
+                                            <td>
+                                                @{string paidColor = item.Paid == item.Cost ? "text-success" : "text-danger";}
+                                                <span class="@paidColor">
+                                                    @if (item.Paid == item.Cost)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Cost)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Paid)
+                                                        <span>/</span>
+                                                        @Html.DisplayFor(modelItem => item.Cost)
+                                                    }
+                                                </span>
+                                            </td>
+                                        }
+
+
+                                        @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                                        {
+                                            <td class="colHeaderLink sortable headerrow-updated">
+                                                @Html.CheckBox("PremiumPaid", item.PremiumPaid, new { @disabled = true })
+                                            </td>
+                                        }
+
+                                        <td>
+                                            @if (item.Status.Id == TaskTrackingSystem.Shared.Entities.Status.DeletedId)
+                                            {
+                                                using (Html.BeginForm("Restore", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { @class = "inline" }))
+                                                {
+                                                    @Html.AntiForgeryToken()
+
+                                                    <button type="submit" class="btn btn-default">Воcстановить</button>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (ControllerAccessAttribute.ProjectEdit(item.Id))
+                                                {
+                                                    <a href="~/Project/Edit/@item.Id">
+                                                        <button class="btn btn-default" type="button">
+                                                            <img src="~/Content/img/edit.png" />
+                                                        </button>
+                                                    </a>
+                                                }
+                                            }
+
+                                            @if (ControllerAccessAttribute.ProjectDelete(item.Id))
+                                            {
+                                                <a>
+                                                    @using (Html.BeginForm("Delete", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { @class = "inline", onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="btn btn-default" onsubmit="return confirm('Удалить?')">
+                                                            <img src="~/Content/img/empty-trash.png" />
+                                                        </button>
+                                                    }
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $('#ExcelStart').change(
+        function () {
+            $(this).attr("value", this.value)
+        });
+
+    $('#ExcelEnd').change(
+        function () {
+            $(this).attr("value", this.value)
+        });
+</script>
+
+
+@if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdmin())
+{
+    <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+    <script src="~/Scripts/SignalR/PTDetails.js"></script>
+    <script src="~/signalr/hubs"></script>
+}

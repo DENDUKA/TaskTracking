@@ -1,0 +1,53 @@
+﻿@model TaskTrackingSystem.Models.ProjectModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage(0, Model.Id);}
+
+<h2>Календарный план для :</h2>
+<h3>@Model.Name</h3>
+
+<hr />
+
+@if (ControllerAccessAttribute.GetAccessPage("Project", "CalendarPlanEdit"))
+{
+    <p>
+        @Html.ActionLink("Редактировать", "CalendarPlanEdit", "Project", new { id = Model.Id }, new { })
+    </p>
+}
+<div class="container">
+    <div class="row">
+        <div class="col-1 table-bordered">
+            <b>№ Этапа</b>
+        </div>
+        <div class="col-6 table-bordered">
+            <b>Виды работ</b>
+        </div>
+        <div class="col-5 table-bordered">
+            <b>Сроки выполнения работ</b>
+        </div>
+    </div>
+    @if (Model.CalendarPlan != null)
+    {
+        foreach (var item in Model.CalendarPlan.CalendarPlanItems)
+        {
+            <div class="row">
+                <div class="col-1 table-bordered">
+                    @item.StageNum
+                </div>
+                <div class="col-6 table-bordered" style="padding:0">
+                    <textarea WorkType rows="4" disabled="disabled"
+                              style="min-width: 100%; background-color: rgb(255, 255, 255); border: none;"
+                              class="col-12">@item.WorkType</textarea>
+                </div>
+                <div class="col-5 table-bordered" style="padding:0">
+                    <textarea WorkType rows="4" disabled="disabled"
+                              style="min-width: 100%; background-color: rgb(255, 255, 255); border: none;"
+                              class="col-12">@item.Deadlines</textarea>
+                </div>
+            </div>
+        }
+    }
+</div>
+<p>
+    @Html.ActionLink("Назад", "Index", "Project", new { id = Model.Id }, new { })
+</p>

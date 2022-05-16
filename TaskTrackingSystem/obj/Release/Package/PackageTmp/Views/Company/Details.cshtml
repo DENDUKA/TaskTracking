@@ -1,0 +1,143 @@
+﻿@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage();}
+
+@model TaskTrackingSystem.Models.CompanyModel
+
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Компания</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DisplayPhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Form)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Form)
+        </dd>
+    </dl>
+</div>
+<p>
+    @if (ControllerAccessAttribute.GetAccessPage("Company","Edit"))
+    {
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id })<span>|</span>
+    }
+
+    @Html.ActionLink("К списку", "Index")
+</p>
+
+<h3>Сотрудники :</h3>
+@if (ControllerAccessAttribute.GetAccessPage("Company","Create"))
+{
+    @Html.ActionLink("Добавить нового", "Create", "Employee", new { CompanyId = Model.Id }, new { })
+}
+
+<table class="table">
+    <tr class="active">
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.Employees[0].Name)
+        </th>
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.Employees[0].Email)
+        </th>
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.Employees[0].PhoneNumber)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Employees[0].AddititionalNumber)
+        </th>
+        <th class="col-xs-1"></th>
+    </tr>
+
+    @foreach (var item in Model.Employees)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Name, "Details", "Employee", new { id = item.Id }, new { })
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DisplayPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.AddititionalNumber)
+            </td>
+            @if (ControllerAccessAttribute.GetAccessPage("Company","Delete"))
+            {
+                <td>
+                    @using (Html.BeginForm("Delete", "Employee", new { id = item.Id }, FormMethod.Post, new { onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-default btn-sm" onsubmit="return confirm('Удалить?')">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    }
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+
+<h3>Проекты :</h3>
+<table class="table">
+    <tr class="active">
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Projects[0].Name)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Projects[0].Account)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Projects[0].ContractNumber)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.Projects[0].Status)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Projects)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+            </td>
+            <td>
+                @Html.ActionLink(item.Account.Name, "Details", "Account", new { id = item.Account.Login }, new { })
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ContractNumber)
+            </td>
+            <td>
+                <span class="@TaskTrackingSystem.Logic.Logic.Instance.Status.GetColor(item.Status.Name)">
+                    @Html.DisplayFor(model => item.Status.Name)
+                </span>
+            </td>
+        </tr>
+    }
+
+</table>

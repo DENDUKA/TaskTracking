@@ -1,0 +1,378 @@
+﻿@model TaskTrackingSystem.Models.ProjectTypeModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage(Model.Id);}
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Model.Name</h2>
+
+<p>
+    @Html.ActionLink("Главная", "Index", "Home") /
+    @Html.ActionLink("Категория проектов", "Index", "ProjectType") /
+    @Model.Name
+</p>
+@if (ControllerAccessAttribute.GetAccessPage("ProjectType", "Exel"))
+{
+    using (Html.BeginForm("Exel", "ProjectType", new { projectTypeId = Model.Id }, FormMethod.Post, null))
+    {
+        @Html.AntiForgeryToken()
+        <button style="float:right; border:none; background:white;" type="submit">Экспорт : <img style="width:30px;" src="~/fonts/exelIcon.png" /></button>
+    }
+}
+
+@if (ControllerAccessAttribute.GetAccessPage("Project", "Create"))
+{
+    <p>
+        @Html.ActionLink("Создать новый", "Create", "Project", new { projectTypeId = Model.Id }, new { })
+    </p>
+}
+
+<h2 class="text-success">
+    В работе
+</h2>
+
+<table class="table sortable">
+    <tr class="active">
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.ProjectList[0].Name)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].CompanyId)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].ContractNumber)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].Account)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.ProjectList[0].DateStart)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.ProjectList[0].DateEnd)
+        </th>
+        @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+        {
+            <th class="col-xs-1">
+                @Html.DisplayNameFor(model => model.ProjectList[0].Cost)
+            </th>
+        }
+
+
+        <th class="col-xs-1 sorttable_nosort" />
+
+    </tr>
+
+    @foreach (var item in Model.ProjectList)
+    {
+        if (item.Status.Name.Equals(TaskTrackingSystem.Shared.Entities.Status.InWork))
+        {
+            <tr>
+                <td class="col-xs-3">
+                    @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                </td>
+                <td class="col-xs-2">
+                    @Html.ActionLink(item.Company.Name, "Details", "Company", new { id = item.CompanyId }, new { })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractNumber)
+                </td>
+                <td class="col-xs-2">
+                    @Html.DisplayFor(modelItem => item.ResponsiblesString)
+                </td>
+                <td class="col-xs-1" sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                    @Html.DisplayFor(modelItem => item.DateStart)
+                </td>
+                <td class="col-xs-1" sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                    @Html.DisplayFor(modelItem => item.DateEnd)
+                </td>
+                @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                {
+                    <td class="col-xs-1">
+                        @Html.DisplayFor(modelItem => item.Cost)
+                    </td>
+                }
+
+
+                <td class="col-xs-1">
+                    @if (ControllerAccessAttribute.ProjectEdit(item.Id))
+                    {
+                        <a href="~/Project/Edit/@item.Id">
+                            <button class="btn btn-default btn-sm" type="button">
+                                <span class="glyphicon glyphicon-edit" />
+                            </button>
+                        </a>
+                    }
+                    @if (ControllerAccessAttribute.ProjectDelete(item.Id))
+                    {
+
+                        using (Html.BeginForm("Delete", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-default btn-sm" onsubmit="return confirm('Удалить?')">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<h2 class="text-warning">
+    Будущие
+</h2>
+<table class="table sortable">
+    <tr class="active">
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.ProjectList[0].Name)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].CompanyId)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].ContractNumber)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].Account)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.ProjectList[0].DateStart)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.ProjectList[0].DateEnd)
+        </th>
+        @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+        {
+            <th class="col-xs-1">
+                @Html.DisplayNameFor(model => model.ProjectList[0].Cost)
+            </th>
+        }
+        <th class="col-xs-1 sorttable_nosort" />
+    </tr>
+    @foreach (var item in Model.ProjectList)
+    {
+        if (item.Status.Name.Equals(TaskTrackingSystem.Shared.Entities.Status.Postponded))
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                </td>
+                <td>
+                    @Html.ActionLink(item.Company.Name, "Details", "Company", new { id = item.CompanyId }, new { })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ResponsiblesString)
+                </td>
+                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                    @Html.DisplayFor(modelItem => item.DateStart)
+                </td>
+                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                    @Html.DisplayFor(modelItem => item.DateEnd)
+                </td>
+                @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cost)
+                    </td>
+                }
+                <td>
+                    @if (ControllerAccessAttribute.ProjectEdit(item.Id))
+                    {
+                        <a href="~/Project/Edit/@item.Id">
+                            <button class="btn btn-default btn-sm" type="button">
+                                <span class="glyphicon glyphicon-edit" />
+                            </button>
+                        </a>
+                    }
+                    @if (ControllerAccessAttribute.ProjectDelete(item.Id))
+                    {
+                        using (Html.BeginForm("Delete", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-default btn-sm" onsubmit="return confirm('Удалить?')">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<h2 class="text-danger">
+    Завершено
+</h2>
+
+<table class="table sortable">
+    <tr class="active">
+        <th class="col-xs-3">
+            @Html.DisplayNameFor(model => model.ProjectList[0].Name)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].CompanyId)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].ContractNumber)
+        </th>
+        <th class="col-xs-2">
+            @Html.DisplayNameFor(model => model.ProjectList[0].Account)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.ProjectList[0].DateStart)
+        </th>
+        <th class="col-xs-1">
+            @Html.DisplayNameFor(model => model.ProjectList[0].DateEnd)
+        </th>
+        @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+        {
+            <th class="col-xs-1">
+                @Html.DisplayNameFor(model => model.ProjectList[0].Cost)
+            </th>
+        }
+        <th class="col-xs-1 sorttable_nosort" />
+    </tr>
+
+    @foreach (var item in Model.ProjectList)
+    {
+        if (item.Status.Name.Equals(TaskTrackingSystem.Shared.Entities.Status.Done))
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                </td>
+                <td>
+                    @Html.ActionLink(item.Company.Name, "Details", "Company", new { id = item.CompanyId }, new { })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ResponsiblesString)
+                </td>
+                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                    @Html.DisplayFor(modelItem => item.DateStart)
+                </td>
+                <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                    @Html.DisplayFor(modelItem => item.DateEnd)
+                </td>
+                @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cost)
+                    </td>
+                }
+                <td>
+                    @if (ControllerAccessAttribute.ProjectEdit(item.Id))
+                    {
+                        <a href="~/Project/Edit/@item.Id"><button class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-edit" /></button></a>
+                    }
+                    @if (ControllerAccessAttribute.ProjectDelete(item.Id))
+                    {
+                        using (Html.BeginForm("Delete", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-default btn-sm" onsubmit="return confirm('Удалить?')">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+@if (ControllerAccessAttribute.GetAccessPage("Project", "Restore"))
+{
+    <h2>
+        Удаленные
+    </h2>
+    <table class="table sortable">
+        <tr class="active">
+            <th class="col-xs-3">
+                @Html.DisplayNameFor(model => model.ProjectList[0].Name)
+            </th>
+            <th class="col-xs-2">
+                @Html.DisplayNameFor(model => model.ProjectList[0].CompanyId)
+            </th>
+            <th class="col-xs-2">
+                @Html.DisplayNameFor(model => model.ProjectList[0].ContractNumber)
+            </th>
+            <th class="col-xs-2">
+                @Html.DisplayNameFor(model => model.ProjectList[0].Account)
+            </th>
+            <th class="col-xs-1">
+                @Html.DisplayNameFor(model => model.ProjectList[0].DateStart)
+            </th>
+            <th class="col-xs-1">
+                @Html.DisplayNameFor(model => model.ProjectList[0].DateEnd)
+            </th>
+
+            @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+            {
+                <th class="col-xs-1">
+                    @Html.DisplayNameFor(model => model.ProjectList[0].Cost)
+                </th>
+            }
+            <th class="col-xs-1 sorttable_nosort" />
+        </tr>
+
+        @foreach (var item in Model.ProjectList)
+        {
+            if (item.Status.Name.Equals(TaskTrackingSystem.Shared.Entities.Status.Deleted))
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Name, "Index", "Project", new { id = item.Id }, new { })
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Company.Name, "Details", "Company", new { id = item.CompanyId }, new { })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContractNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResponsiblesString)
+                    </td>
+                    <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateStart)">
+                        @Html.DisplayFor(modelItem => item.DateStart)
+                    </td>
+                    <td sorttable_customkey="@TaskTrackingSystem.Models.ModelHelper.GetDateFormatForSorttable(item.DateEnd)">
+                        @Html.DisplayFor(modelItem => item.DateEnd)
+                    </td>
+                    @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cost)
+                        </td>
+                    }
+                    <td>
+                        @using (Html.BeginForm("Restore", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="submit" value="Восстановить" class="btn btn-default" />
+                        }
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("Delete", "Project", new { id = item.Id, projectTypeId = (string)Url.RequestContext.RouteData.Values["id"] }, FormMethod.Post, new { onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-default btn-sm" onsubmit="return confirm('Удалить?')">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+}

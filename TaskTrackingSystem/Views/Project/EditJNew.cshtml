@@ -1,0 +1,342 @@
+﻿@model TaskTrackingSystem.Models.ProjectModel
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage(Model.ProjectTypeId);}
+
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Редактирование : @Model.Name</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/ProjectType/Details/@Model.ProjectTypeId">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.ProjectTypeId)
+                    @Html.HiddenFor(model => model.AccountLogin)
+                    @Html.HiddenFor(model => model.DateEndFact)
+
+                    <div class="form-horizontal">
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id, new { @id = "projectId" })
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })
+
+                            @Html.TextBoxFor(model => model.DateStart, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label" })
+
+                            @Html.TextBoxFor(model => model.DateEnd, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div>
+                                @Html.DropDownListFor(model => model.StatusId, Model.DropDownListStatuses, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                        {
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.ContractStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div>
+                                    @Html.DropDownListFor(model => model.ContractStatus, Model.DropDownListContractStatuses, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.Hidden("ContractStatus", Model.ContractStatus)
+                        }
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.ContractNumber, htmlAttributes: new { @class = "control-label" })
+
+                            @Html.EditorFor(model => model.ContractNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.ContractNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @Html.Hidden("CompanyId", Model.CompanyId)
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.CompanyId, htmlAttributes: new { @class = "control-label" })
+                            <div class="col-md-10">
+                                <input id="CompaniesInput" type="text" list="CompaniesDL" autocomplete="off" class="input-validation-error form-control text-box single-line">
+                                <datalist id="CompaniesDL">
+                                    @foreach (var company in Model.Companies)
+                                    {
+                                        <option id="@company.Id" value="@company.Name" />
+                                    }
+                                </datalist>
+                                @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @if (ControllerAccessAttribute.GetAccessPage("Project", "CostField"))
+                        {
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.Paid, htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Paid, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Paid, "", new { @class = "text-danger" })
+                                    <button id="AddToPaidButton" type="button" class="btn-filepath">+</button>
+                                    <input id="AddToPaid" class="form-control text-box single-line" data-val="true" value="0">
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.Hidden("Cost", Model.Cost)
+                            @Html.Hidden("Paid", Model.Paid)
+                        }
+
+                        @if (TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.IsAdminOrBuh())
+                        {
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.PremiumPaid, htmlAttributes: new { })
+                                @Html.CheckBox("PremiumPaid", Model.PremiumPaid)
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.PremiumPaid, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.Hidden("PremiumPaid", Model.PremiumPaid)
+                        }
+
+                        <hr />
+
+
+                        <div class="command-bar">
+                            <div class="ops-cont">
+                                <div class="ops-menus">
+                                    <ul id="opsbar-edit" class="first ops">
+                                        <li class="last">
+                                            <input type="submit" value="Сохранить" class="issueaction-edit-issue button edit first last" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <hr />
+
+                <h2>Пути к файлам :</h2>
+
+
+                <div class="mod-content">
+                    @foreach (var item in Model.FilePaths)
+                    {
+                        <div class="row">
+                            <ul id="issuedetails" class="property-list two-cols">
+                                <li class="item">
+                                    <div class="wrap">
+                                        <strong class="name">Описание :</strong>
+                                        <span class="value">
+                                            <input class="inputtext " onfocusout="Update(this)" value="@item.Description" description />
+                                        </span>
+                                    </div>
+                                </li>
+
+                                <li class="item item-right">
+                                    <div class="wrap">
+                                        <strong class="name">Путь к файлу/папке:</strong>
+                                        <span class="value">
+                                            <input class="inputtext " onfocusout="Update(this)" value="@item.Path" path />
+                                        </span>
+
+                                        <button deleteButton id="@item.Id" onclick="ButtonRemove(this)" class="btn-filepath btn-filepath-delete" style="float:right">-</button>
+                                    </div>
+                                </li>
+                            </ul>
+
+
+
+                            <ul id="issuedetails" class="property-list two-cols">
+                                <li class="item">
+                                    <div class="wrap">
+                                        <strong class="name">&nbsp;</strong>
+                                        <span class="value">
+
+                                        </span>
+                                    </div>
+                                </li>
+
+                                <li class="item item-right">
+                                    <div class="wrap">
+                                        <strong class="name">&nbsp;</strong>
+                                        <span class="value">
+                                            <a openpath href="myproto://@item.Path">Открыть</a>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+
+
+
+                    <div id="AddRow" class="row">
+                        <ul id="issuedetails" class="property-list two-cols">
+                            <li class="item">
+                                <div class="wrap">
+                                    <strong class="name"><button id="AddButton" class="btn-filepath btn-filepath-add" onclick="ButtonAdd(this)">+</button></strong>
+                                    <span class="value">
+                                    </span>
+                                </div>
+                            </li>
+
+                            <li class="item item-right">
+                                <div class="wrap">
+                                    <strong class="name"></strong>
+                                    <span class="value">
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div style="display:none;" id="RowTemplate" class="row">
+                    <ul id="issuedetails" class="property-list two-cols">
+                        <li class="item">
+                            <div class="wrap">
+                                <strong class="name">Описание :</strong>
+                                <span class="value">
+                                    <input class="inputtext " onfocusout="Update(this)" description />
+                                </span>
+                            </div>
+                        </li>
+
+                        <li class="item item-right">
+                            <div class="wrap">
+                                <strong class="name">Путь к файлу/папке:</strong>
+                                <span class="value">
+                                    <input class="inputtext " onfocusout="Update(this)" path />
+                                </span>
+
+                                <button deleteButton onclick="ButtonRemove(this)" class="btn-filepath btn-filepath-delete" style="float:right">-</button>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                    <ul id="issuedetails" class="property-list two-cols">
+                        <li class="item">
+                            <div class="wrap">
+                                <strong class="name">&nbsp;</strong>
+                                <span class="value">
+                                    &nbsp;
+                                </span>
+                            </div>
+                        </li>
+
+                        <li class="item item-right">
+                            <div class="wrap">
+                                <strong class="name">&nbsp;</strong>
+                                <span class="value">
+                                    <a openpath href="">Открыть</a>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/MyScripts/ProjectEdit/TablePathToFile.js"></script>
+<script src="~/Scripts/MyScripts/Calendar/URLHelper.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        $('#AddToPaidButton').click(function () {
+            var paid = $("#Paid");
+            var addtopaid = $("#AddToPaid");
+
+            var sum = parseFloat(paid.val()) + parseFloat(addtopaid.val());
+
+            if (!isNaN(sum)) {
+                paid.val(sum);
+            }
+        });
+
+        //Евент : записываем в скрытое поле CompanyId значение выбранное в CompaniesInput списке
+        $("#CompaniesInput").focusout(function () {
+            g = $('#CompaniesInput').val();
+            id = $('#CompaniesDL').find('option[value="' + g + '"]').attr('id');
+            $("#CompanyId").val(id);
+        });
+
+        //Заполняем предвыбранное значение в CompaniesInput списке
+        $('#CompaniesInput').val($('#CompaniesDL').find('option[id="' + $("#CompanyId").val() + '"]').attr('value'));
+    });
+
+
+
+
+</script>

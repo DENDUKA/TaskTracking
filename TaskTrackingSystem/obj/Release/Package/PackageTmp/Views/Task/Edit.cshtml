@@ -1,0 +1,113 @@
+﻿@model TaskTrackingSystem.Models.TaskModel
+
+@{var access = TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.GetAccessForAccount();
+    var ptId = TaskTrackingSystem.Logic.Logic.Instance.Project.Get(Model.ProjectId).ProjectType.Id;
+    var ptAccess = access.ProjectTypeAccesses.Find(item => item.ProjectTypeId == ptId);}
+
+@{
+    /**/
+
+    ViewBag.Title = "Edit";
+}
+
+<h2>Задача для проекта : @Model.ProjectName</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.TextBoxFor(model => model.DateStart, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateEnd, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StatusId, Model.DropDownListStatuses, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountLogin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListAccounts, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AccountLogin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (access.AccountAccessPage || (ptAccess != null && ptAccess.Responsible))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.StoryPoints, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.StoryPoints, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.StoryPoints, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.TextAreaFor(model => model.Description, new {@id ="DescriptionId", @class = "form-control col-md-6", @style = "min-width: 100%", @rows = "12" })
+
+
+                @*@Html.TextAreaFor(model => model.Description, new { @style = "min-width: 100%" })*@
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div id="buttonsave" class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Назад", "Details", "Task", new { id = Model.Id }, new { })
+</div>
+
+
+<script src="~/Scripts/NicEdit/nicEditNew.js"></script>
+
+<script type="text/javascript">
+    bkLib.onDomLoaded(function () {
+        nicEditors. allTextAreas();
+
+        var descriptionElement = $("#DescriptionId").parent().find(".nicEdit-main");        
+        descriptionElement.html(descriptionElement.text());
+    });
+
+
+</script>

@@ -1,0 +1,116 @@
+﻿@model IEnumerable<TaskTrackingSystem.Models.CompanyModel>
+
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+@{ControllerAccessAttribute.FillFromPage();}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Компании</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Home/Index">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                                @if (ControllerAccessAttribute.GetAccessPage("Company", "Create"))
+                                {
+                                    <li class="last">
+                                        <a class="issueaction-edit-issue button edit first last" href="~/Company/Create">
+                                            <span>Создать новую</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="ops-cont">
+                    <table id="issuetable" class="hide-carrot sortable">
+                        <thead>
+                            <tr class="rowHeader">
+                                <th class="colHeaderLink sortable headerrow-summary">
+                                    <span></span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-assignee defaultsort">
+                                    <span>@Html.DisplayNameFor(model => model.Name)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-priority">
+                                    <span>@Html.DisplayNameFor(model => model.Email)</span>
+                                </th>
+
+                                <th class="colHeaderLink sortable headerrow-status">
+                                    <span>@Html.DisplayNameFor(model => model.PhoneNumber)</span>
+                                </th>
+
+                                @if (ControllerAccessAttribute.GetAccessPage("Company", "Delete"))
+                                {
+                                    <th>
+                                        Действия
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Form)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink(item.Name, "Details", new { id = item.Id })
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DisplayPhoneNumber)
+                                    </td>
+
+                                    @if (ControllerAccessAttribute.GetAccessPage("Company", "Edit"))
+                                    {
+                                        <td>
+                                            <a href="@Path.Combine(HttpContext.Current.Request.Path.Replace("Index", ""), "Edit", item.Id.ToString())">
+                                                <button class="btn btn-default" type="button">
+                                                    <img src="~/Content/img/edit.png" />
+                                                </button>
+                                            </a>
+                                            @using (Html.BeginForm("Delete", "Company", new { id = item.Id }, FormMethod.Post, new { @class = "inline", onsubmit = "return confirm('Удалить " + @item.Name + "?');" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-default" onsubmit="return confirm('Удалить?')">
+                                                    <img src="~/Content/img/empty-trash.png" />
+                                                </button>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/MyScripts/Sorttable/defaultsort.js"></script>

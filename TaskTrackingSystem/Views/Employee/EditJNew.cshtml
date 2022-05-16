@@ -1,0 +1,95 @@
+﻿@model TaskTrackingSystem.Models.EmployeeModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Редактирование сотрудника для : @Model.Company.Form @Model.Company.Name</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Employee/Details/@Model.Id">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+                        @Html.HiddenFor(model => model.CompanyId)
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group-addon">@@</div>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group-addon">+7</div>
+                            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.AddititionalNumber, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.AddititionalNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.AddititionalNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="command-bar">
+                            <div class="ops-cont">
+                                <div class="ops-menus">
+                                    <ul id="opsbar-edit" class="first ops">
+                                        <li class="last">
+                                            <input type="submit" value="Сохранить" class="issueaction-edit-issue button edit first last" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

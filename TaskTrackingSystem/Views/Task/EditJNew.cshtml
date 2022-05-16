@@ -1,0 +1,151 @@
+﻿@model TaskTrackingSystem.Models.TaskModel
+@using TaskTrackingSystem.CustomAuthorizeAttribute;
+
+@{var access = TaskTrackingSystem.Logic.Logic.Instance.AccountAccess.GetAccessForAccount();
+    var ptId = TaskTrackingSystem.Logic.Logic.Instance.Project.Get(Model.ProjectId).ProjectType.Id;
+    var ptAccess = access.ProjectTypeAccesses.Find(item => item.ProjectTypeId == ptId);}
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="alertHeader"></div>
+
+<div class="item-header">
+    <h2>Задача для проекта : @Model.ProjectName</h2>
+</div>
+
+<div id="main-content" class="main-content">
+    <div class="active-area">
+        <div class="column full">
+            <div class="content">
+                <div class="command-bar">
+                    <div class="ops-cont">
+                        <div class="ops-menus">
+                            <ul id="opsbar-edit" class="first ops">
+                                <li class="last">
+                                    <a class="issueaction-edit-issue button edit first last" href="~/Task/Details/@Model.Id">
+                                        <span>Назад</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+
+                    <input id="StatusId" type="hidden" value="@Model.StatusId" name="StatusId" />
+                    <input id="ProjectId" type="hidden" value="@Model.ProjectId" name="StatusId" />
+                    <div>
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { })
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "inputtext" } })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "" })
+                            @Html.TextBoxFor(model => model.DateStart, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "" })
+                            @Html.TextBoxFor(model => model.DateEnd, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "" })
+                            @Html.DropDownListFor(model => model.StatusId, Model.DropDownListStatuses, new { @class = "inputitem" })
+                        </div>
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.AccountLogin, htmlAttributes: new { @class = "" })
+                            @Html.DropDownListFor(model => model.AccountLogin, Model.DropDownListAccounts, new { @class = "inputitem" })
+                            <div>
+                                @Html.ValidationMessageFor(model => model.AccountLogin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @if (access.AccountAccessPage || (ptAccess != null && ptAccess.Responsible))
+                        {
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.StoryPoints, htmlAttributes: new { @class = "" })
+                                @Html.EditorFor(model => model.StoryPoints, new { htmlAttributes = new { @class = "inputitem" } })
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.StoryPoints, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+
+                        <div class="field-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "" })
+
+                            @Html.TextAreaFor(model => model.Description, new { @id = "DescriptionId", @class = "inputtext", @rows = "12" })
+                        </div>
+
+                        @if (ControllerAccessAttribute.GetAccessPage("Task", "IsPrivateField"))
+                        {
+                            <div class="field-group">
+                                @Html.LabelFor(model => model.IsPrivate, htmlAttributes: new { })
+                                @Html.CheckBox("IsPrivate", Model.IsPrivate)
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+
+                        <hr />
+
+                        <div class="command-bar">
+                            <div class="ops-cont">
+                                <div class="ops-menus">
+                                    <ul id="opsbar-edit" class="first ops">
+                                        <li class="last">
+                                            <input type="submit" value="Сохранить" class="issueaction-edit-issue button edit first last" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/NicEdit/nicEditNew.js"></script>
+
+<script type="text/javascript">
+    bkLib.onDomLoaded(function () {
+        nicEditors.allTextAreas();
+
+        var descriptionElement = $("#DescriptionId").parent().find(".nicEdit-main");
+        descriptionElement.html(descriptionElement.text());
+
+
+        var pp = descriptionElement.parent();
+
+        descriptionElement.css('width', '99%');
+        pp.css('width', '90%');
+        pp.parent().find('.nicEdit-panelContain').css('width', '90%');
+        $(pp.parent().find('div')[0]).css('width', '100%');
+
+    });
+</script>

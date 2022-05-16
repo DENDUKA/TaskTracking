@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TaskTrackingSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="Login" />
+    </Key>
+    <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Account" FromRole="Account" ToRole="Project" />
+    <NavigationProperty Name="Task" Relationship="Self.FK_Task_Account" FromRole="Account" ToRole="Task" />
+  </EntityType>
+  <EntityType Name="CalendarPlan">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectId" Type="Int32" Nullable="false" />
+    <Property Name="StageNum" Type="Int32" Nullable="false" />
+    <Property Name="WorkType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Deadlines" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_CalendarPlan_Project" FromRole="CalendarPlan" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Form" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_Company" FromRole="Company" ToRole="Employee" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Company" FromRole="Company" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AdditionalNumber" Type="Int32" />
+    <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Company" Relationship="Self.FK_Employee_Company" FromRole="Employee" ToRole="Company" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Responsible" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ProjectType" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="Customer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ContractNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_Project_Account" FromRole="Project" ToRole="Account" />
+    <NavigationProperty Name="CalendarPlan" Relationship="Self.FK_CalendarPlan_Project" FromRole="Project" ToRole="CalendarPlan" />
+    <NavigationProperty Name="Company" Relationship="Self.FK_Project_Company" FromRole="Project" ToRole="Company" />
+    <NavigationProperty Name="ProjectType1" Relationship="Self.FK_Project_ProjectType" FromRole="Project" ToRole="ProjectType" />
+    <NavigationProperty Name="Status1" Relationship="Self.FK_Project_Status" FromRole="Project" ToRole="Status" />
+    <NavigationProperty Name="ProjectPathToFile" Relationship="Self.FK_ProjectPathToFile_Project" FromRole="Project" ToRole="ProjectPathToFile" />
+    <NavigationProperty Name="Task" Relationship="Self.FK_Task_Project" FromRole="Project" ToRole="Task" />
+  </EntityType>
+  <EntityType Name="ProjectPathToFile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectId" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="Path" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_ProjectPathToFile_Project" FromRole="ProjectPathToFile" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="ProjectType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_ProjectType" FromRole="ProjectType" ToRole="Project" />
+  </EntityType>
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Project" Relationship="Self.FK_Project_Status" FromRole="Status" ToRole="Project" />
+    <NavigationProperty Name="Task" Relationship="Self.FK_Task_Status" FromRole="Status" ToRole="Task" />
+  </EntityType>
+  <EntityType Name="Task">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="Project" Type="Int32" Nullable="false" />
+    <Property Name="Account" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StoryPoints" Type="Int32" />
+    <NavigationProperty Name="Account1" Relationship="Self.FK_Task_Account" FromRole="Task" ToRole="Account" />
+    <NavigationProperty Name="Project1" Relationship="Self.FK_Task_Project" FromRole="Task" ToRole="Project" />
+    <NavigationProperty Name="Status1" Relationship="Self.FK_Task_Status" FromRole="Task" ToRole="Status" />
+  </EntityType>
+  <EntityType Name="TaskLogs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="TaskId" Type="Int32" Nullable="false" />
+    <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserLogin" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ChangedValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="NewValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="CalendarDiaryEvent">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="DateStart" />
+      <PropertyRef Name="DateEnd" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <Association Name="FK_Project_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Login" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="Responsible" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Login" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Account" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CalendarPlan_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="CalendarPlan" Type="Self.CalendarPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CalendarPlan">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Employee_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_ProjectType">
+    <End Role="ProjectType" Type="Self.ProjectType" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ProjectType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectPathToFile_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="ProjectPathToFile" Type="Self.ProjectPathToFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProjectPathToFile">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="Task" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TaskTrackingSystemContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Account" EntityType="Self.Account" />
+    <EntitySet Name="CalendarPlan" EntityType="Self.CalendarPlan" />
+    <EntitySet Name="Company" EntityType="Self.Company" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" />
+    <EntitySet Name="Project" EntityType="Self.Project" />
+    <EntitySet Name="ProjectPathToFile" EntityType="Self.ProjectPathToFile" />
+    <EntitySet Name="ProjectType" EntityType="Self.ProjectType" />
+    <EntitySet Name="Status" EntityType="Self.Status" />
+    <EntitySet Name="Task" EntityType="Self.Task" />
+    <EntitySet Name="TaskLogs" EntityType="Self.TaskLogs" />
+    <EntitySet Name="CalendarDiaryEvent" EntityType="Self.CalendarDiaryEvent" />
+    <AssociationSet Name="FK_Project_Account" Association="Self.FK_Project_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_Account" Association="Self.FK_Task_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CalendarPlan_Project" Association="Self.FK_CalendarPlan_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="CalendarPlan" EntitySet="CalendarPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Employee_Company" Association="Self.FK_Employee_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Employee" EntitySet="Employee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Company" Association="Self.FK_Project_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_ProjectType" Association="Self.FK_Project_ProjectType">
+      <End Role="ProjectType" EntitySet="ProjectType" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Status" Association="Self.FK_Project_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Project" EntitySet="Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectPathToFile_Project" Association="Self.FK_ProjectPathToFile_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="ProjectPathToFile" EntitySet="ProjectPathToFile" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_Project" Association="Self.FK_Task_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_Status" Association="Self.FK_Task_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Task" EntitySet="Task" />
+    </AssociationSet>
+    <FunctionImport Name="GetDiaryEventInRange" ReturnType="Collection(TaskTrackingSystemModel.GetDiaryEventInRange_Result)">
+      <Parameter Name="fromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="toDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="GetProjectById" ReturnType="Collection(TaskTrackingSystemModel.GetProjectById_Result)">
+      <Parameter Name="ProjectId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetProjectsByProjectTypeId" ReturnType="Collection(TaskTrackingSystemModel.GetProjectsByProjectTypeId_Result)">
+      <Parameter Name="ProjectTypeId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetProjectsForAccount" ReturnType="Collection(TaskTrackingSystemModel.GetProjectsForAccount_Result)">
+      <Parameter Name="Login" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="GetProjectsForCompany" ReturnType="Collection(TaskTrackingSystemModel.GetProjectsForCompany_Result)">
+      <Parameter Name="CompanyId" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="GetProjectStoryPoints" ReturnType="Collection(Int32)">
+      <Parameter Name="ProjectId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetTaskById" ReturnType="Collection(TaskTrackingSystemModel.GetTaskById_Result)">
+      <Parameter Name="TaskId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetTasksByProjectId" ReturnType="Collection(TaskTrackingSystemModel.GetTasksByProjectId_Result)">
+      <Parameter Name="ProjectId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetTasksForAccount" ReturnType="Collection(TaskTrackingSystemModel.GetTasksForAccount_Result)">
+      <Parameter Name="Login" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="GetDiaryEventInRange_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetProjectById_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Responsible" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Customer" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ContractNumber" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="Cost" Nullable="true" Precision="19" />
+    <Property Type="String" Name="AccName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccRole" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="ProjectType" Nullable="false" />
+    <Property Type="String" Name="PtName" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="Int32" Name="CompanyId" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetProjectsByProjectTypeId_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Responsible" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Customer" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ContractNumber" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="Cost" Nullable="true" Precision="19" />
+    <Property Type="String" Name="AccName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccRole" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="ProjectType" Nullable="false" />
+    <Property Type="String" Name="PtName" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="Int32" Name="CompanyId" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="GetProjectsForAccount_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="Int32" Name="ProjectType" Nullable="false" />
+    <Property Type="String" Name="PtName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Customer" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ContractNumber" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="Cost" Nullable="true" Precision="19" />
+    <Property Type="Int32" Name="CompanyId" Nullable="false" />
+    <Property Type="Int32" Name="Status" Nullable="true" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="GetProjectsForCompany_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Responsible" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="Int32" Name="ProjectType" Nullable="false" />
+    <Property Type="String" Name="PtName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Customer" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ContractNumber" Nullable="true" MaxLength="100" />
+    <Property Type="Decimal" Name="Cost" Nullable="true" Precision="19" />
+    <Property Type="Int32" Name="CompanyId" Nullable="false" />
+    <Property Type="String" Name="AccName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccRole" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Status" Nullable="true" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="GetTaskById_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="TaskName" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="Int32" Name="StoryPoints" Nullable="true" />
+    <Property Type="Int32" Name="StatusId" Nullable="true" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="ProjectId" Nullable="true" />
+    <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccountLogin" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccountName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetTasksByProjectId_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="TaskName" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="Int32" Name="StoryPoints" Nullable="true" />
+    <Property Type="Int32" Name="StatusId" Nullable="true" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="ProjectId" Nullable="true" />
+    <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccountLogin" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="AccountName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="GetTasksForAccount_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="TaskName" Nullable="false" MaxLength="100" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+    <Property Type="Int32" Name="ProjectId" Nullable="false" />
+    <Property Type="Int32" Name="StoryPoints" Nullable="true" />
+    <Property Type="Int32" Name="StatusId" Nullable="true" />
+    <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="ProjectId1" Nullable="true" />
+    <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="100" />
+  </ComplexType>
+</Schema>

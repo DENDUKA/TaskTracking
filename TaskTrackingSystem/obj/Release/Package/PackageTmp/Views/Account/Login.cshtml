@@ -1,0 +1,26 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("returnUrl", (string)ViewBag.ReturnUrl);
+    <div class="input-group mb-3">
+        @Html.TextBox("login", "", new { @class = "form-control", @placeholder = "Логин" })
+    </div>
+
+    <div class="input-group mb-3">
+        @Html.Password("password", "", new { @class = "form-control", @placeholder = "Пароль" })
+    </div>
+    <div class="text-danger">
+        @TempData["Status"]
+    </div>
+
+    <button class="btn btn-primary">Log In</button>
+}

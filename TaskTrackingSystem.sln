@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackingSystem.UI.Web", "TaskTrackingSystem\TaskTrackingSystem.UI.Web.csproj", "{31907E25-5D01-47E8-90AC-6E1110583A02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackingSystem.Tests", "TaskTrackingSystem.Tests\TaskTrackingSystem.Tests.csproj", "{77CCBE44-22B1-42E3-BE66-80B513501341}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackingSystem.Logic", "TaskTrackingSystem.Logic\TaskTrackingSystem.Logic.csproj", "{30C66756-7179-46B2-BF8A-7ECFEE80C3CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackingSystem.Shared", "TaskTrackingSystem.Shared\TaskTrackingSystem.Shared.csproj", "{1AC75B0A-F389-46B0-B924-E65D98172E19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackingSystem.AbstractDAL", "TaskTrackingSystem.AbstractDAL\TaskTrackingSystem.AbstractDAL.csproj", "{7E52A505-D9FB-4FD1-98E0-E6D30D582C4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackingSystem.DAL", "TaskTrackingSystem.DAL\TaskTrackingSystem.DAL.csproj", "{D475802E-6D10-4CE1-9C25-0D862A192FE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{E79E0E2A-0A13-4572-8AA6-370BAC971EFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31907E25-5D01-47E8-90AC-6E1110583A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31907E25-5D01-47E8-90AC-6E1110583A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31907E25-5D01-47E8-90AC-6E1110583A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31907E25-5D01-47E8-90AC-6E1110583A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77CCBE44-22B1-42E3-BE66-80B513501341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77CCBE44-22B1-42E3-BE66-80B513501341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77CCBE44-22B1-42E3-BE66-80B513501341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77CCBE44-22B1-42E3-BE66-80B513501341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30C66756-7179-46B2-BF8A-7ECFEE80C3CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30C66756-7179-46B2-BF8A-7ECFEE80C3CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30C66756-7179-46B2-BF8A-7ECFEE80C3CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30C66756-7179-46B2-BF8A-7ECFEE80C3CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AC75B0A-F389-46B0-B924-E65D98172E19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AC75B0A-F389-46B0-B924-E65D98172E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AC75B0A-F389-46B0-B924-E65D98172E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AC75B0A-F389-46B0-B924-E65D98172E19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E52A505-D9FB-4FD1-98E0-E6D30D582C4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E52A505-D9FB-4FD1-98E0-E6D30D582C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E52A505-D9FB-4FD1-98E0-E6D30D582C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E52A505-D9FB-4FD1-98E0-E6D30D582C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D475802E-6D10-4CE1-9C25-0D862A192FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D475802E-6D10-4CE1-9C25-0D862A192FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D475802E-6D10-4CE1-9C25-0D862A192FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D475802E-6D10-4CE1-9C25-0D862A192FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79E0E2A-0A13-4572-8AA6-370BAC971EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79E0E2A-0A13-4572-8AA6-370BAC971EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79E0E2A-0A13-4572-8AA6-370BAC971EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79E0E2A-0A13-4572-8AA6-370BAC971EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FA32BE5C-5CA5-41FD-AA83-FF4A6B4A3CB9}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

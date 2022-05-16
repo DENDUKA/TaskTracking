@@ -1,0 +1,22 @@
+﻿body {
+    font: 12px/1.4 arial,FreeSans,Helvetica,sans-serif;
+    background-color: #f7f7f7;
+    color: #000;
+    min-width: 1000px;
+}
+.header {
+    background-color: #114070;
+    color: #ffffff;
+    position: relative;
+    z-index: 1999;
+}
+
+.login-section {
+    padding: 0;
+    width: auto;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 37%;
+    margin-right:20px;
+}

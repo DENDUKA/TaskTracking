@@ -1,0 +1,32 @@
+﻿@model IEnumerable<TaskTrackingSystem.Models.ProjectTypeModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Категория проектов</h2>
+
+<table class="table sortable">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Name, "Details", "ProjectType", new { id = item.Id }, new { })
+            </td>
+            <!--
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+                 -->
+        </tr>
+    }
+
+</table>
